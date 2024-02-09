@@ -1,30 +1,30 @@
-import express from "express";
-import { connect } from "mongoose";
-import cors from "cors";
-import passport from "passport";
-import session from "express-session";
-import cookieParser from "cookie-parser";
-import { config } from "dotenv";
+const express = require('express');
+const cors = require('cors');
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
 
-config();
+const dbConfig = require("./config/dbConfig");
+const authRoutes = require("./routes/authRoutes");
+const authenticate = require("./authentication");
+
+require("dotenv").config();
+const port = process.env.PORT || 4001;
+
 const app = express();
-// Connect to MongoDB
-connect(`${process.env.MONGODB_URI}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(
-  () => {
-    console.log("Connnected to Mongoose successfully!");
-  },
-  (err) => {
-    console.log("Error while connecting" + err);
-  }
-);
+dbConfig.main(); //CONNECT TO MONGODB
 
-app.get("/", (req, res) => {
-  res.send({ message: "Server started" });
-});
+app.use(session({
+  secret: `${process.env.SECRET_KEY}`,
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cors({origin: "http://localhost:5173", credentials:true}));
 
-app.listen(process.env.PORT || 4001, () => {
-  console.log(`Server is running on port 4000`);
+app.use("/auth", authRoutes);
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
