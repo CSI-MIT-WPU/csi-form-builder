@@ -15,7 +15,7 @@ const formSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    content:{
+    input_fields:{
         type: mongoose.Schema.Types.Mixed
     }
 }, {timestamps:true}
