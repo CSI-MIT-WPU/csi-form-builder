@@ -45,37 +45,29 @@ const HomePage = () => {
     <div className="p-3 grid w-full grid-cols-1 gap-4 pt-8 md:grid-cols-2 lg:grid-cols-4">
       <StatsCard
         title="Total visits"
-        // icon={<LuView className="text-blue-600" />}
         helperText="All time form visits"
         value="100,000"
-        // loading={false}
         className="shadow-md shadow-gray-300"
       />
 
       <StatsCard
         title="Total submissions"
-        // icon={<FaWpforms className="text-yellow-600" />}
         helperText="All time form submissions"
         value="50,000"
-        // loading={false}
         className="shadow-md shadow-gray-300"
       />
 
       <StatsCard
         title="Submission rate"
-        // icon={<HiCursorClick className="text-green-600" />}
         helperText="Visits that result in form submission"
         value="60%"
-        // loading={false}
         className="shadow-md shadow-gray-300"
       />
 
       <StatsCard
         title="Bounce rate"
-        // icon={<TbArrowBounce className="text-red-600" />}
         helperText="Visits that leaves without interacting"
         value="40%"
-        // loading={false}
         className="shadow-md shadow-gray-300"
       />
     </div>
