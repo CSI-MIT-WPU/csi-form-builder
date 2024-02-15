@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
@@ -16,4 +16,8 @@ function App() {
   );
 }
 
+{
+  /* <div className="text-3xl font-bold ">Hello World</div>
+      <Button>Heelo</Button> */
+}
 export default App;
