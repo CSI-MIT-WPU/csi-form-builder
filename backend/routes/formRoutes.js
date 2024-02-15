@@ -2,6 +2,18 @@ const express = require('express');
 const Response = require('../models/Response');
 const router = express.Router();
 
+//GET ALL RESPONSES FOR ALL FORMS
+router.get("/responses", async(req, res)=>{
+    try {
+        const responses = await Response.find();
+        res.status(200).json({"responses": responses});
+    } catch (error) {
+        res.status(500).json({message: error});
+    }
+});
+
+
+// GET RESPONSES FOR A SPECIFIC FORM
 router.get("/responses/:form_id", async (req, res) => {
     try {
         const form_id = req.params.form_id;
@@ -12,6 +24,7 @@ router.get("/responses/:form_id", async (req, res) => {
     }
 })
 
+//POST A NEW RESPONSE TO A FORM
 router.post("/submit", async(req, res) => {
     try {
         const {user_email, form_id, content} = req.body;
