@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 const responseSchema = new mongoose.Schema({
     user_email: {
@@ -8,6 +9,10 @@ const responseSchema = new mongoose.Schema({
     form_id: {
         type: String,
         required: true
+    },
+    res_id: {
+        type: String,
+        default: uuidv4()
     },
     content: {
         type: mongoose.Schema.Types.Mixed
