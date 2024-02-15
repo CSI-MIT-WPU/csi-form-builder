@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   Card,
   CardContent,
@@ -40,15 +40,24 @@ export function StatsCard({
 }
 
 const HomePage = () => {
+  const [temp, setTemp] = useState([
+    { form_title: "titleone", timestamp: new Date() },
+    2,
+    3,
+  ]);
   return (
-    
-    <div className="p-3 grid w-full grid-cols-1 gap-4 pt-8 md:grid-cols-2 lg:grid-cols-4">
-      <StatsCard
-        title="Total visits"
-        helperText="All time form visits"
-        value="100,000"
-        className="shadow-md shadow-gray-300"
-      />
+    <div className="grid w-full grid-cols-2 gap-4 p-3 pt-8 md:grid-cols-2 lg:grid-cols-4">
+      {temp.map((da, index) => {
+        return (
+          <StatsCard
+            key={index}
+            title="Total visits"
+            helperText="All time form visits"
+            value={da.form_title}
+            className="hidden shadow-md shadow-gray-300 md:block"
+          />
+        );
+      })}
 
       <StatsCard
         title="Total submissions"
@@ -68,7 +77,7 @@ const HomePage = () => {
         title="Bounce rate"
         helperText="Visits that leaves without interacting"
         value="40%"
-        className="shadow-md shadow-gray-300"
+        className="hidden shadow-md shadow-gray-300 md:block"
       />
     </div>
   );
