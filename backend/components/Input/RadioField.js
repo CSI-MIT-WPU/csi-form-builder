@@ -1,13 +1,13 @@
 class RadioField{
     /**
      * @param {String} name
-     * @param {Array} options
+     * @param {String} value
      * @param {String} label
      * @param {Boolean} required
     */
-    constructor(name, options, label, required){
+    constructor(name, value, label, required){
         this.name = name;
-        this.options = options;
+        this.value = value;
         this.label = label;
         this.required = required;
     }

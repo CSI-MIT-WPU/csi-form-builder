@@ -1,6 +1,8 @@
 const express = require('express');
-const Response = require('../models/Response');
 const router = express.Router();
+
+const Response = require('../models/Response');
+const validateResponse = require('../middleware/validation');
 
 //GET ALL RESPONSES FOR ALL FORMS
 router.get("/responses", async(req, res)=>{
@@ -25,7 +27,7 @@ router.get("/responses/:form_id", async (req, res) => {
 })
 
 //POST A NEW RESPONSE TO A FORM
-router.post("/submit", async(req, res) => {
+router.post("/submit", validateResponse, async(req, res) => {
     try {
         const {user_email, form_id, content} = req.body;
         const newResponse = await Response.create({
