@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from "react";
-import CreateFormBtn from "@/components/CreateFormBtn";;
+import CreateFormBtn from "@/components/CreateFormBtn";
+import PublishedFormsBtn from "@/components/PublishedFormsBtn";
 import {
   Card,
   CardContent,
@@ -101,6 +102,7 @@ const HomePage = () => {
     <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
     
     <CreateFormBtn/>
+    <PublishedFormsBtn/>
     </>
   );
 }
