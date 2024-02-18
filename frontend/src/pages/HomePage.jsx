@@ -101,8 +101,10 @@ const HomePage = () => {
     <h2 className="text-xl font-semibold pr-10 pl-10 pb-2">Your Forms</h2>
     <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
     
-    <CreateFormBtn/>
-    <PublishedFormsBtn/>
+    <div className="flex">
+        <CreateFormBtn/>
+        <PublishedFormsBtn/>
+      </div>
     </>
   );
 }

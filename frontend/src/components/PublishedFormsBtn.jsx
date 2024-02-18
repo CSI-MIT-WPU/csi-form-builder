@@ -12,8 +12,8 @@ import { Badge } from './ui/badge';
 
 function PublishedFormsBtn(){
   return(
-    <div className="ml-10 mr-10 mt-5">
-      <Card className="w-[350px]">
+    <div className="ml-10 mr-10">
+      <Card className="w-[400px]">
         <CardHeader>
           <div className='flex justify-between'>
             <CardTitle>titleone</CardTitle>
@@ -21,7 +21,7 @@ function PublishedFormsBtn(){
           </div>
           <CardDescription>2 mins ago</CardDescription>
           <br />
-          <CardDescription>form description Lorem, ipsum dolor sit amet consectetur adipisicing elit.</CardDescription>
+          <CardDescription>Form description lorem, ipsum dolor sit amet elit lorem ipsum consectetur adipisicing elit.</CardDescription>
         </CardHeader>
         <CardContent>
           <Button variant='outline' className='w-full'>
