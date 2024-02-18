@@ -1,8 +1,10 @@
 # <div align="center">This file will contain body templates for different API routes</div>
 
+## <div>Form Routes</div>
 
+Route: <span style="color: green;">GET</span> http://127.0.0.1:3000/forms/all ( used to get all forms )
 
-Route: <span style="color: yellow;">POST</span> http://127.0.0.1:3000/build ( used to make a new form )
+Route: <span style="color: yellow;">POST</span> http://127.0.0.1:3000/forms ( used to make a new form )
 
 ```json
 {
@@ -105,7 +107,53 @@ Route: <span style="color: yellow;">POST</span> http://127.0.0.1:3000/build ( us
 }
 ```
 
-Route: <span style="color: yellow;">POST</span> http://127.0.0.1:3000/forms/submit ( used to make a new response )
+Route: <span style="color: blue;">PUT</span> http://127.0.0.1:3000/forms ( used to update a specific form )
+```json
+{
+  "form_id":"80c2bca2-ebc8-43a4-9bd3-30fc29241ec1",
+  "form_title":"epikform123",
+  "team":"technical",
+  "fields":[
+        {
+      "name": "First Name",
+      "type": "textfield",
+      "minLen": 5,
+      "maxLen": 10,
+      "label": "Enter first name",
+      "placeholder": "Ben",
+      "required": true
+    },
+      {
+      "name": "Last Name",
+      "type": "textfield",
+      "minLen": 5,
+      "maxLen": 10,
+      "label": "Enter Last name",
+      "placeholder": "Mover",
+      "required": true
+    },
+    {
+      "name": "Address",
+      "type": "textarea",
+      "minLen": 5,
+      "maxLen": 100,
+      "label": "Enter address",
+      "placeholder": "Ben",
+      "required": true
+    }
+  ]
+}
+```
+
+Route: <span style="color: red;">DELETE</span> http://127.0.0.1:3000/forms/:form_id ( used to delete a specific form (and all of its responses with it))
+
+## <div>Response Routes</div>
+
+Route: <span style="color: green;">GET</span> http://127.0.0.1:3000/responses/all ( used to get all responses )
+
+Route: <span style="color: green;">GET</span> http://127.0.0.1:3000/responses/:form_id ( used to get responses of a specific form )
+
+Route: <span style="color: yellow;">POST</span> http://127.0.0.1:3000/responses/submit ( used to make a new response )
 
 ```json
 {
@@ -163,3 +211,6 @@ Route: <span style="color: yellow;">POST</span> http://127.0.0.1:3000/forms/subm
   ]
 }
 ```
+Route: <span style="color: red;">DELETE</span> http://127.0.0.1:3000/responses/response/:res_id ( used to delete a specific response based off of res_id)
+
+Route: <span style="color: red;">DELETE</span> http://127.0.0.1:3000/responses/form/:form_id ( used to delete a specific response based off of form_id)

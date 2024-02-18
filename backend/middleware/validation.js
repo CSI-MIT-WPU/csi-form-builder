@@ -19,6 +19,9 @@ const validateResponse = async (req, res, next) => {
             return res.status(404).json({message:"Form id invalid. Form not found."})
         }
         const inputFields = form[0].input_fields;
+        if (inputFields.length != fields.length) {
+            return res.status(400).json({message: `Improper input format`});
+        }
         for (let i = 0; i < fields.length; i++) {
             let field = fields[i];
             if (field.type === "textfield") {
@@ -93,9 +96,8 @@ const validateResponse = async (req, res, next) => {
             }
         }
     } catch (error) {
-        return res.status(500).json({error:error})
+        return res.status(500).json({error:"Internal server error!"})
     }
-
     next();
 }
 

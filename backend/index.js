@@ -6,8 +6,8 @@ const passport = require("passport");
 
 const dbConfig = require("./config/dbConfig");
 const authRoutes = require("./routes/authRoutes");
-const buildRoutes = require("./routes/buildRoutes");
 const formRoutes = require("./routes/formRoutes");
+const responseRoutes = require("./routes/responseRoutes");
 const authenticate = require("./authentication"); /* DO NOT REMOVE THIS LINE. */
 
 require("dotenv").config();
@@ -28,8 +28,8 @@ app.use(passport.session());
 app.use(cors({origin: "http://localhost:5173", credentials:true}));
 
 app.use("/auth", authRoutes);
-app.use("/build", buildRoutes);
-app.use("/forms", formRoutes)
+app.use("/forms", formRoutes);
+app.use("/responses", responseRoutes)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

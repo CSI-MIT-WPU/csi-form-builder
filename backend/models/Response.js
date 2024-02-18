@@ -12,7 +12,7 @@ const responseSchema = new mongoose.Schema({
     },
     res_id: {
         type: String,
-        default: uuidv4()
+        default: uuidv4
     },
     content: {
         type: mongoose.Schema.Types.Mixed
