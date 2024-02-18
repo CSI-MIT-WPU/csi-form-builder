@@ -15,6 +15,17 @@ class NumberField{
         this.placeholder = placeholder;
         this.required = required;
     }
+
+    //checks for range and required
+    static checkValidity(val, minVal, maxVal, required){
+        if (required && val.toString() === "" || val === null) {
+            return false;
+        }
+        if (val < minVal || val > maxVal) {
+            return false;
+        }
+        return true;
+    }
 }
 
 module.exports = NumberField;

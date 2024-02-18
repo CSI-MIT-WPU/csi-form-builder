@@ -11,6 +11,14 @@ class CheckboxField{
         this.label = label;
         this.required = required;
     }
+
+    //checks if required
+    static checkValidity(val, required){
+        if (required && val === "" || val === null) {
+            return false;
+        }
+        return true;
+    }
 }
 
 module.exports = CheckboxField;

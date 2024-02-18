@@ -1,3 +1,5 @@
+const validator = require("email-validator");
+
 class EmailField{
     /**
      * @param {String} name
@@ -10,6 +12,17 @@ class EmailField{
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
+    }
+    
+    //checks for email and required
+    static checkValidity(val, required){
+        if (required && val.toString() === "" || val === null) {
+            return false;
+        }
+        if (!validator.validate(val)) {
+            return false;
+        }
+        return true;
     }
 }
 

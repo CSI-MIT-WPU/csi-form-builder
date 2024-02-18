@@ -11,6 +11,13 @@ class FileField{
         this.label = label;
         this.required = required;
     }
+
+    static checkValidity(val, required){
+        if (required && val.toString() === "" || val === null) {
+            return false;
+        }
+        return true;
+    }
 }
 
 module.exports = FileField;
