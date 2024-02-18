@@ -7,6 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { CopyIcon } from "@radix-ui/react-icons";
 
 export function StatsCard({
   title,
@@ -38,6 +47,8 @@ export function StatsCard({
     </Card>
   );
 }
+
+
 
 const HomePage = () => {
   const [statsData, setStatsData] = useState([

@@ -43,7 +43,7 @@ const Navbar = () => {
                 </li>
                 <li onClick={() => handleModeChange('system')} className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center" role="menuitem">
                   <CogIcon className="w-6 h-6 mr-2 text-gray-600" />
-                  System Mode
+                  System mode
                 </li>
               </ul>
             )}
