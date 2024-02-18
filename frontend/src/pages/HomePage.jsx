@@ -40,47 +40,61 @@ export function StatsCard({
 }
 
 const HomePage = () => {
-  const [temp, setTemp] = useState([
-    { form_title: "titleone", timestamp: new Date() },
-    2,
-    3,
+  const [statsData, setStatsData] = useState([
+    {
+      title: "Total visits",
+      //icon: <LuView className="text-blue-600" />,
+      helperText: "All time form visits",
+      value: "1000", 
+      loading: false,
+      className: "hidden md:block",
+      timestamp: new Date() 
+    },
+    {
+      title: "Total submissions",
+      //icon: <FaWpforms className="text-yellow-600" />,
+      helperText: "All time form submissions",
+      value: "500", 
+      loading: false,
+      className: "hidden md:block",
+      timestamp: new Date() 
+    },
+    {
+      title: "Submission rate",
+      //icon: <HiCursorClick className="text-green-600" />,
+      helperText: "Visits that result in form submission",
+      value: "50%", 
+      loading: false,
+      className: "hidden md:block",
+      timestamp: new Date() 
+    },
+    {
+      title: "Bounce rate",
+      //icon: <TbArrowBounce className="text-red-600" />,
+      helperText: "Visits that leave without interacting",
+      value: "20%", 
+      loading: false,
+      className: "hidden md:block",
+      timestamp: new Date() 
+    }
   ]);
+
   return (
-    <div className="grid w-full grid-cols-2 gap-4 p-3 pt-8 md:grid-cols-2 lg:grid-cols-4">
-      {temp.map((da, index) => {
-        return (
-          <StatsCard
-            key={index}
-            title="Total visits"
-            helperText="All time form visits"
-            value={da.form_title}
-            className="hidden shadow-md shadow-gray-300 md:block"
-          />
-        );
-      })}
-
-      <StatsCard
-        title="Total submissions"
-        helperText="All time form submissions"
-        value="50,000"
-        className="shadow-md shadow-gray-300"
-      />
-
-      <StatsCard
-        title="Submission rate"
-        helperText="Visits that result in form submission"
-        value="60%"
-        className="shadow-md shadow-gray-300"
-      />
-
-      <StatsCard
-        title="Bounce rate"
-        helperText="Visits that leaves without interacting"
-        value="40%"
-        className="hidden shadow-md shadow-gray-300 md:block"
-      />
+    <div className="w-full pr-10 pl-10 pt-3 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      {statsData.map((stat, index) => (
+        <StatsCard
+          key={index}
+          title={stat.title}
+          icon={stat.icon}
+          helperText={stat.helperText}
+          value={stat.value}
+          loading={stat.loading}
+          className={stat.className}
+          timestamp={stat.timestamp} 
+        />
+      ))}
     </div>
   );
-};
+}
 
 export default HomePage;
