@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from "react";
+import CreateFormBtn from "@/components/CreateFormBtn";;
 import {
   Card,
   CardContent,
@@ -7,15 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { CopyIcon } from "@radix-ui/react-icons";
 
 export function StatsCard({
   title,
@@ -47,8 +39,6 @@ export function StatsCard({
     </Card>
   );
 }
-
-
 
 const HomePage = () => {
   const [statsData, setStatsData] = useState([
@@ -91,6 +81,7 @@ const HomePage = () => {
   ]);
 
   return (
+    <>
     <div className="w-full pr-10 pl-10 pt-3 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       {statsData.map((stat, index) => (
         <StatsCard
@@ -105,6 +96,12 @@ const HomePage = () => {
         />
       ))}
     </div>
+    <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
+    <h2 className="text-xl font-semibold pr-10 pl-10 pb-2">Your Forms</h2>
+    <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
+    
+    <CreateFormBtn/>
+    </>
   );
 }
 
