@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import CreateFormBtn from "@/components/CreateFormBtn";
 import PublishedFormsBtn from "@/components/PublishedFormsBtn";
+import Toolbar from "@/components/Toolbar";
 import {
   Card,
   CardContent,
@@ -144,7 +145,9 @@ const HomePage = () => {
       <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
       <h2 className="text-xl font-semibold pr-10 pl-10 pb-2">Your Forms</h2>
       <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
-      
+      <div ml-10 mb-5>
+        <Toolbar/>
+      </div>
       <div className="flex">
           <CreateFormBtn/>
           {publishedForms.map((form) => (
