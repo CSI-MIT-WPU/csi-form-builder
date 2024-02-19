@@ -10,9 +10,9 @@ function Toolbar({ setSearch }) {
     return (
       <div className="flex items-center space-x-2 ml-10 mb-4">
         <Input onChange={(event) => setSearch(event.target.value)} type="search" placeholder="Type what you want to search" className='w-80'/>
-        <Button>
+        {/* <Button>
         <FaSearch type='submit' className="mr-2 h-4 w-4" /> Search
-        </Button>
+        </Button> */}
         <Button>
         <TbArrowsSort className="mr-2 h-4 w-4" /> Sort
         </Button>
