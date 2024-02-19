@@ -1,10 +1,14 @@
 import React from "react";
 //import { Card } from "@shadcn/ui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-//import DropdownMenu from '@shadcn/ui/dropdown-menu';
 import { Card } from "@/components/ui/card";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-//import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 function FormPage() {
   const inputOptions = ["Textbox", "Textarea", "Checkbox", "Radio Button"];
@@ -48,22 +52,27 @@ function FormPage() {
       {/* Right part */}
       <div className="w-1/4 h-full">
         <div className="flex flex-col justify-between h-full">
-          {/* Input dropdown */}
           <div className="mb-4">
             <DropdownMenu title="Input">
-              {inputOptions.map((option, index) => (
-                <DropdownMenu.Item key={index}>{option}</DropdownMenu.Item>
-              ))}
+              <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {
+                  inputOptions.map((option, index) => {
+                    return (
+                      <DropdownMenuItem key={index}>{option}</DropdownMenuItem>
+                    )
+                  })
+                }
+              </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          {/* Decoration dropdown */}
-          <div>
+          {/*<div>
             <DropdownMenu title="Decoration">
               {decorationOptions.map((option, index) => (
                 <DropdownMenu.Item key={index}>{option}</DropdownMenu.Item>
               ))}
             </DropdownMenu>
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>
