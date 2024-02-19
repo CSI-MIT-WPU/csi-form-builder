@@ -151,8 +151,10 @@ const HomePage = () => {
       <div ml-10 mb-5>
         <Toolbar setSearch={setSearch}/>
       </div>
-      <div className="flex">
+      <div className="flex flex-wrap">
+      <div className="mb-5 mr-10">
           <CreateFormBtn/>
+      </div>
           {publishedForms.filter((form) => {
             return search.toLowerCase() === '' ? form : form.title.toLowerCase().includes(search);
           }).map((form) => (

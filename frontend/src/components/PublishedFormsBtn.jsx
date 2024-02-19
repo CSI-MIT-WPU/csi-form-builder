@@ -12,7 +12,7 @@ import { Badge } from './ui/badge';
 
 function PublishedFormsBtn({ title, description, timestamp }) {
     return (
-        <div className="ml-10 mr-10">
+        <div className=" published-form-container ml-10 mr-10">
             <Card className="w-[400px]">
                 <CardHeader>
                     <div className='flex justify-between'>
