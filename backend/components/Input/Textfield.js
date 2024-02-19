@@ -15,6 +15,18 @@ class TextField{
         this.placeholder = placeholder;
         this.required = required;
     }
+
+
+    //checks for length range and required
+    static checkValidity(val, minLen, maxLen, required){
+        if (required && val === "" || val === null) {
+            return false;
+        }
+        if (val.length < minLen || val.length > maxLen) {
+            return false;
+        }
+        return true;
+    }
 }
 
 module.exports = TextField;
