@@ -86,6 +86,9 @@ const HomePage = () => {
         timestamp: new Date(),
       },
     ]);
+
+    const [search, setSearch] = useState('');
+    console.log(search)
   
     const [statsData, setStatsData] = useState([
       {
@@ -146,11 +149,13 @@ const HomePage = () => {
       <h2 className="text-xl font-semibold pr-10 pl-10 pb-2">Your Forms</h2>
       <div className="my-4 mr-10 ml-10 border-t-2 border-gray-200"></div>
       <div ml-10 mb-5>
-        <Toolbar/>
+        <Toolbar setSearch={setSearch}/>
       </div>
       <div className="flex">
           <CreateFormBtn/>
-          {publishedForms.map((form) => (
+          {publishedForms.filter((form) => {
+            return search.toLowerCase() === '' ? form : form.title.toLowerCase().includes(search);
+          }).map((form) => (
             <PublishedFormsBtn
               key={form.id}
               title={form.title}
