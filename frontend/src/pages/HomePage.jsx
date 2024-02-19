@@ -95,7 +95,7 @@ const HomePage = () => {
         title: "Total visits",
         //icon: <LuView className="text-blue-600" />,
         helperText: "All time form visits",
-        value: "1000", 
+        value: "500", 
         loading: false,
         className: "hidden md:block",
         timestamp: new Date() 
