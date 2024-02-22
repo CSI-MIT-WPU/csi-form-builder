@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 function LoginPage() {
-  const handleGoogleLogin = () => {};
+  const handleGoogleLogin = async () => {
+    const loginUrl = "http://localhost:3000/auth/google";
+    window.open(loginUrl, "_self");
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -30,7 +32,7 @@ function LoginPage() {
           className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none focus:bg-gray-300"
           onClick={handleGoogleLogin}
         >
-          <Link to="/home">Login with Google</Link>
+          Login with Google
         </button>
       </div>
     </div>

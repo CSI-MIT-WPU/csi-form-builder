@@ -1,4 +1,6 @@
-import React, { ReactNode, useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { ReactNode, useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -45,6 +47,16 @@ const HomePage = () => {
     2,
     3,
   ]);
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    async function getUser(){
+      
+    }
+    getUser();
+  }, []);
+
   return (
     <div className="grid w-full grid-cols-2 gap-4 p-3 pt-8 md:grid-cols-2 lg:grid-cols-4">
       {temp.map((da, index) => {

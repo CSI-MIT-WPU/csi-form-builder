@@ -1,5 +1,6 @@
 const passport = require('passport');
 const User = require('./models/User');
+const jwt = require("jsonwebtoken");
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 require("dotenv").config();
 
@@ -10,22 +11,32 @@ passport.use(new GoogleStrategy({
     scope: ['profile', 'email']
   },
   async function(accessToken, refreshToken, profile, cb) {
-    const user = await User.findOne({ googleId: profile.id });
-    if (user) {
-      return cb(null, user);
-    }
-    else{
-        const newUser = await User.create({ email: profile.emails[0].value, googleId: profile.id });
-        return cb(null, newUser);
+    try {
+        let user = await User.findOne({ googleId: profile.id });
+        if (!user) {
+          user = await User.create({ email: profile.emails[0].value, googleId: profile.id });
+        }
+        jwt.sign({ email:user.email }, process.env.JWT_SECRET, (err, token)=>{
+          if (err) {
+            return cb(err, null);
+          }
+          console.log(token);
+          return cb(null, {user, token});
+        });
+      } catch (error) {
+        return cb(error, null);
     }
   }
 ));
 
-passport.serializeUser((user, cb)=>{
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
+/*passport.serializeUser((user, cb)=>{
     cb(null, user.googleId);
 });
 
 passport.deserializeUser(async (id, cb) => {
    const user = await User.findOne({googleId: id});
    cb(null, user); 
-})
+})*/
