@@ -9,10 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
 function FormPage() {
-  const inputOptions = ["Textbox", "Textarea", "Checkbox", "Radio Button"];
-  const decorationOptions = ["H1 Tag", "H2 Tag", "H3 Tag", "Paragraph"];
+  const inputOptions = ["Textbox", "Textarea", "Checkbox", "Paragraph", "Dropdown", "Radio Button"];
+  const decorationOptions = ["H1 Tag", "H2 Tag", "H3 Tag", "H4 Tag", "H5 Tag", "H6 Tag"];
   // Function to handle drag and drop reorder
   const onDragEnd = (result) => {
     // logic to handle drag and drop
@@ -21,8 +20,8 @@ function FormPage() {
   return (
     <div className="flex justify-center items-center h-screen">
       {/* Left part */}
-      <div className="w-3/4 h-full mr-4">
-        <Card className="h-full border border-gray-300 p-4">        
+      <div className="w-3/4 h-full mr-4 ml-3">
+        <Card className="h-full border border-gray-400 p-5 m-5">        
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="form-elements">
               {(provided) => (
@@ -38,7 +37,7 @@ function FormPage() {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <input type="text" placeholder="Textbox" />
+                        <input type="text" placeholder="Textbox" className="m-5 p-5"/>
                       </div>
                     )}
                   </Draggable>
@@ -49,12 +48,13 @@ function FormPage() {
           </DragDropContext>
         </Card>
       </div>
-      {/* Right part */}
+      {/* Right part */}     
       <div className="w-1/4 h-full">
         <div className="flex flex-col justify-between h-full">
           <div className="mb-4">
+          <br></br>
             <DropdownMenu title="Input">
-              <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+              <DropdownMenuTrigger className="p-7 m-5 border border-gray-400">Input</DropdownMenuTrigger>
               <DropdownMenuContent>
                 {
                   inputOptions.map((option, index) => {
@@ -65,14 +65,20 @@ function FormPage() {
                 }
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-          {/*<div>
-            <DropdownMenu title="Decoration">
-              {decorationOptions.map((option, index) => (
-                <DropdownMenu.Item key={index}>{option}</DropdownMenu.Item>
-              ))}
+
+            <DropdownMenu title="Input">
+              <DropdownMenuTrigger className="p-7 m-5 border border-gray-400">Decoration</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {
+                  decorationOptions.map((option, index) => {
+                    return (
+                      <DropdownMenuItem key={index}>{option}</DropdownMenuItem>
+                    )
+                  })
+                }
+              </DropdownMenuContent>
             </DropdownMenu>
-          </div>*/}
+          </div>
         </div>
       </div>
     </div>
