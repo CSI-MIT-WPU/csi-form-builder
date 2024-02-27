@@ -16,7 +16,7 @@ passport.use(new GoogleStrategy({
         if (!user) {
           user = await User.create({ email: profile.emails[0].value, googleId: profile.id });
         }
-        jwt.sign({ email:user.email }, process.env.JWT_SECRET, (err, token)=>{
+        jwt.sign({ email:user.email }, process.env.JWT_SECRET, {expiresIn: '24h'}, (err, token)=>{
           if (err) {
             return cb(err, null);
           }
@@ -31,12 +31,3 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
-
-/*passport.serializeUser((user, cb)=>{
-    cb(null, user.googleId);
-});
-
-passport.deserializeUser(async (id, cb) => {
-   const user = await User.findOne({googleId: id});
-   cb(null, user); 
-})*/

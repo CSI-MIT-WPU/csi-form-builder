@@ -4,11 +4,6 @@ const passport = require('passport');
 
 router.get("/google", passport.authenticate("google", {scope: ["email", "profile"]}));
 
-/*router.get("/google/callback", passport.authenticate("google", {
-    successRedirect: "http://localhost:5173/home",                        TODOs
-    failureRedirect: "/failed"                                        //  ADD jwt 
-}));*/                                                               //   ADD jwt middleware for http://localhost:5173/home
-
 router.get("/google/callback", (req, res, next) => {
     passport.authenticate("google", (err, { user, token }) => {
         if (err) {
