@@ -12,13 +12,13 @@ function List() {
                             <Draggable draggableId="TextField" index={0}>
                             {(provided) => (
                                 <li ref={provided.innerRef} {...provided.draggableProps}>
-                                    <div {...provided.dragHandleProps}>Label</div>
-                                    <input type="text" placeholder="Some value" className="border-2 border-gray-400 h-12 w-[100%]"/>
+                                    <div className="mt-2" {...provided.dragHandleProps}>Text Box</div>
+                                    <input type="text" placeholder=" " className="mt-2 mx- border-2 border-gray-400 h-12 w-[95%]"/>
                                 </li>
                             )}
                             </Draggable>
                             {provided.placeholder}
-                        </ul>
+                        </ul>                        
                     )}
                 </Droppable>
             </div>
@@ -28,7 +28,7 @@ function List() {
 
 function Canvas(props){
     return (
-        <Card className="h-full border border-gray-400 p-5 m-5">        
+        <Card className="h-full border border-gray-400 p-2 m-2">        
             <Droppable droppableId="canvas" direction="vertical">
                 {(provided) => (
                     <div {...provided.droppableProps} ref={provided.innerRef} className="h-full">
@@ -40,8 +40,8 @@ function Canvas(props){
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                                 >
-                                    <div>Label</div>
-                                    <input type={field.type} placeholder="Some value" className="border-2 border-gray-400 h-12 w-[100%]"/>
+                                    <div className="m-3">Text Box</div>
+                                    <input type={field.type} placeholder="  Enter text here" className="ml-3 border-2 border-gray-400 h-12 w-[97%]"/>
                                 </div>
                             )}
                             </Draggable>
@@ -53,7 +53,6 @@ function Canvas(props){
         </Card>
     )
 }
-
 
 function FormPage() {
   const inputOptions = ["Textbox", "Textarea", "Checkbox", "Paragraph", "Dropdown", "Radio Button"];
@@ -67,11 +66,9 @@ function FormPage() {
 
   const [canvasItems, setCanvasItems] = useState([]);
 
-
   return (
 <   DragDropContext onDragEnd={onDragEnd}>
         <div className="flex justify-center items-center h-screen">
-
 
             {/* Left part */}
             <div className="w-3/4 h-full mr-4 ml-3">
