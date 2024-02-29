@@ -1,55 +1,41 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card } from "@/components/ui/card";
+import InputField from "@/components/InputFields/InputField";
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 
 function List() {
     return (
         <div className="flex flex-col justify-between h-full">
             <div className="mb-4">
-                <Droppable droppableId="list">
-                    {(provided) => (
-                        <ul className="flex flex-col gap-2 justify-center" {...provided.droppableProps} ref={provided.innerRef}>
-                            <Draggable draggableId="TextField" index={0}>
-                            {(provided) => (
-                                <li ref={provided.innerRef} {...provided.draggableProps}>
-                                    <div {...provided.dragHandleProps}>Label</div>
-                                    <input type="text" placeholder="Some value" className="border-2 border-gray-400 h-12 w-[100%]"/>
-                                </li>
-                            )}
-                            </Draggable>
-                            {provided.placeholder}
-                        </ul>
-                    )}
-                </Droppable>
+                <InputField type="text" label="Some label" inputType="text"/>
+                <InputField type="radio" label="Some different label" inputType="radio"/>
             </div>
         </div>
     );
 }
 
 function Canvas(props){
+    const [canvasItems, setCanvasItems] = useState([]);
+    const [{ isOver }, dropRef] = useDrop({
+        accept: 'input',
+        drop: (item) => {
+            setCanvasItems([...canvasItems, item]);
+        },
+        collect: (monitor) => ({
+          isOver: monitor.isOver(),
+        }),
+      });
     return (
-        <Card className="h-full border border-gray-400 p-5 m-5">        
-            <Droppable droppableId="canvas" direction="vertical">
-                {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className="h-full">
-                        {props.canvasItems.map((field, index) => (
-                            <Draggable key={index} draggableId={field.id} index={index}>
-                            {(provided) => (
-                                <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                >
-                                    <div>Label</div>
-                                    <input type={field.type} placeholder="Some value" className="border-2 border-gray-400 h-12 w-[100%]"/>
-                                </div>
-                            )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
+        <Card ref={dropRef} className="h-full border border-gray-400 p-4">        
+            {canvasItems.map((item, index) => (
+                <div key={index}>
+                    <label htmlFor={item.id}>{item.label}</label>
+                    <input type={item.inputType} />
+                </div>
+            ))}
         </Card>
     )
 }
@@ -59,23 +45,14 @@ function FormPage() {
   const inputOptions = ["Textbox", "Textarea", "Checkbox", "Paragraph", "Dropdown", "Radio Button"];
   const decorationOptions = ["H1 Tag", "H2 Tag", "H3 Tag", "H4 Tag", "H5 Tag", "H6 Tag"];
 
-  // Function to handle drag and drop reorder
-  const onDragEnd = (result) => {
-    console.log(result);
-    setCanvasItems([...canvasItems, {type:"text", id:"1"}])
-  };
-
-  const [canvasItems, setCanvasItems] = useState([]);
-
-
   return (
-<   DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex justify-center items-center h-screen">
+    <DndProvider backend={HTML5Backend}>
+        <div className="flex justify-center gap-4 items-center h-screen p-4">
 
 
             {/* Left part */}
-            <div className="w-3/4 h-full mr-4 ml-3">
-                <Canvas canvasItems={canvasItems}/>
+            <div className="w-3/4 h-full">
+                <Canvas/>
             </div>
 
             {/* Right part */}    
@@ -84,7 +61,7 @@ function FormPage() {
             </div>
 
         </div>
-    </DragDropContext>
+    </DndProvider>
   );
 }
 
