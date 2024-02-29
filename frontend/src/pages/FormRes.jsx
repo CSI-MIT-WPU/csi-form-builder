@@ -1,28 +1,8 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import CreateFormBtn from "@/components/HomePage/CreateFormBtn";
-import PublishedFormsBtn from "@/components/HomePage/PublishedFormsBtn";
-import Toolbar from "@/components/HomePage/Toolbar";
+import DataTable from "@/components/common/DataTable";
 import StatsCard from "@/components/common/StatsCard";
+import { useState } from "react";
 
-const HomePage = () => {
-  const [search, setSearch] = useState("");
-
-  const [publishedForms, setPublishedForms] = useState([
-    {
-      id: 1,
-      title: "titleone",
-      description: "description for form 1",
-      timestamp: new Date(),
-    },
-    {
-      id: 2,
-      title: "titletwo",
-      description: "description fro form 2",
-      timestamp: new Date(),
-    },
-  ]);
-
+const FormRes = () => {
   const [statsData, setStatsData] = useState([
     {
       title: "Total visits",
@@ -63,7 +43,7 @@ const HomePage = () => {
   ]);
 
   return (
-    <>
+    <main>
       <div className="grid w-full grid-cols-1 gap-4 pl-10 pr-10 pt-3 md:grid-cols-2 lg:grid-cols-4">
         {statsData.map((stat, index) => (
           <StatsCard
@@ -78,33 +58,13 @@ const HomePage = () => {
           />
         ))}
       </div>
-      <h2 className="mt-4 pb-2 pl-10 pr-10 text-xl font-semibold">
-        Your Forms
-      </h2>
+      <h2 className="mt-4 pb-2 pl-10 pr-10 text-xl font-semibold">Responses</h2>
       <hr className="mx-10 my-2 border border-muted" />
-
-      <Toolbar setSearch={setSearch} />
-
-      <div className="mx-10 grid grid-cols-3 gap-8">
-        <CreateFormBtn />
-
-        {publishedForms
-          .filter((form) => {
-            return search.toLowerCase() === ""
-              ? form
-              : form.title.toLowerCase().includes(search);
-          })
-          .map((form) => (
-            <PublishedFormsBtn
-              key={form.id}
-              title={form.title}
-              description={form.description}
-              timestamp={form.timestamp}
-            />
-          ))}
+      <div className="mx-10">
+        <DataTable />
       </div>
-    </>
+    </main>
   );
 };
 
-export default HomePage;
+export default FormRes;

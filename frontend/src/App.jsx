@@ -3,6 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import FormPage from "./pages/FormPage";
 import Navbar from "./components/common/Navbar";
+import FormRes from "./pages/FormRes";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<FormPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/form-res/:id" element={<FormRes />} />
         </Routes>
       </div>
     </Router>

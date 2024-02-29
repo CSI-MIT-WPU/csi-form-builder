@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { SunIcon, MoonIcon, CogIcon } from '@heroicons/react/solid';
+import React, { useState } from "react";
+// import { SunIcon, MoonIcon, CogIcon } from '@heroicons/react/solid';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedMode, setSelectedMode] = useState('sun'); // Default mode is sun (light mode)
+  const [selectedMode, setSelectedMode] = useState("sun"); // Default mode is sun (light mode)
 
   const handleModeChange = (mode) => {
     setSelectedMode(mode);
@@ -14,14 +14,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white-800 pt-4 pr-4 pl-4 min-h-[]">
+    <nav className="bg-white-800 min-h-[] pl-4 pr-4 pt-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <img src="/your-logo.png" alt="" className="h-8 mr-2" />
-          <span className="text-black text-lg font-semibold pb-1">FormBuilder</span>
+          <img src="/your-logo.png" alt="" className="mr-2 h-8" />
+          <span className="pb-1 text-lg font-semibold text-black">
+            FormBuilder
+          </span>
         </div>
         <div className="flex items-center">
-          <div className="relative inline-block w-10 align-middle select-none transition duration-200 ease-in pb-1 mr-2">
+          {/* <div className="relative inline-block w-10 align-middle select-none transition duration-200 ease-in pb-1 mr-2">
             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center space-x-2">
               {selectedMode === 'sun' ? (
                 <SunIcon className="w-6 h-6 text-yellow-500" />
@@ -47,8 +49,8 @@ const Navbar = () => {
                 </li>
               </ul>
             )}
-          </div>
-          <div className="relative inline-block w-10 align-middle select-none transition duration-200 ease-in pb-1">
+          </div> */}
+          <div className="relative inline-block w-10 select-none pb-1 align-middle transition duration-200 ease-in">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
