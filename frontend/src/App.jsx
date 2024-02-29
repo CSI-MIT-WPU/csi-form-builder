@@ -10,6 +10,7 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<FormPage />} />
           <Route path="/home" element={<HomePage />} />
         </Routes>
