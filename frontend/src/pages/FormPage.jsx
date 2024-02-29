@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
-import InputField from "@/components/InputFields/InputField";
+import InputField from "@/components/common/InputField";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -9,9 +9,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 function List() {
     return (
         <div className="flex flex-col justify-between h-full">
-            <div className="mb-4">
-                <InputField type="text" label="Some label" inputType="text"/>
-                <InputField type="radio" label="Some different label" inputType="radio"/>
+            <div className="flex flex-col gap-4">
+                <InputField type="text" label="Textbox" inputType="text" _name="text"/>
+                <InputField type="radio" label="Radiobutton" inputType="radio" _name="radioGroup"/>
             </div>
         </div>
     );
@@ -22,6 +22,7 @@ function Canvas(props){
     const [{ isOver }, dropRef] = useDrop({
         accept: 'input',
         drop: (item) => {
+            console.log(item)
             setCanvasItems([...canvasItems, item]);
         },
         collect: (monitor) => ({
@@ -33,7 +34,7 @@ function Canvas(props){
             {canvasItems.map((item, index) => (
                 <div key={index}>
                     <label htmlFor={item.id}>{item.label}</label>
-                    <input type={item.inputType} />
+                    <input type={item.inputType} name={item._name}/>
                 </div>
             ))}
         </Card>

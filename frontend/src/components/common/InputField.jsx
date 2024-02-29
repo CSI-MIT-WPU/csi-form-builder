@@ -1,12 +1,10 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import { useDrag } from 'react-dnd';
 
-export default function InputField({type, label, inputType}) {
+export default function InputField({type, label, inputType, _name}) {
   const [{isDragging}, dragRef] = useDrag({
     type:"input",
-    item: {type, label, inputType},
+    item: {type, label, inputType, _name},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -16,16 +14,19 @@ export default function InputField({type, label, inputType}) {
       {inputType === 'text' && (
         <>
           <div>{label}</div>
-          <input type="text"  placeholder='sample text' className='border-2 rounded border-zinc-400'/>
+          <input type="text"  placeholder='sample text' className='border-2 rounded border-gray-400 w-[100%] h-10 p-1' name={_name}/>
         </>
       )}
       {inputType === 'checkbox' && (
-        <input type="checkbox" />
+        <input type="checkbox" name={_name}/>
       )}
       {inputType === 'radio' && (
         <>
           <div>{label}</div>
-          <input type="radio" name="radioGroup" />
+          <div>   
+            <input type="radio" name={_name} />
+            <label>Option 1</label>
+          </div>
         </>
       )}
     </div>
