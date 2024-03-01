@@ -2,15 +2,18 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
-import {DndContext, closestCorners, useDroppable} from '@dnd-kit/core';
-import InputField from "@/components/common/InputField";
+import {DndContext, DragOverlay, useDroppable} from '@dnd-kit/core';
+//import InputField from "@/components/common/InputField"; TEMP. REMOVED
+import TextField from "@/InputFields/TextField";
+import EmailField from "@/InputFields/EmailField";
 
 function List() {
+  
     return (
         <div className="flex flex-col justify-between h-full">
             <div className="flex flex-col gap-4">
-                <InputField type="text" label="Textbox" inputType="text" _name="txtBox"/>
-                <InputField type="text" label="Textbox" inputType="text" _name="txtBox1"/>
+                <TextField/>
+                <EmailField/>
             </div>
         </div>
     );
@@ -39,7 +42,6 @@ function FormPage() {
   const [canvasItems, setCanvasItems] = useState([]);
 
   function handleDragEnd({over}){
-    console.log(over);
     if (over && over.id === "canvas") {
         setCanvasItems([...canvasItems, {id:1, label:"Textbox", inputType:"text", _name:"txtBox"}])
     }
