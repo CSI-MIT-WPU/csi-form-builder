@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {DndContext, useDroppable, DragOverlay} from '@dnd-kit/core';
 
 import TextField from "@/InputFields/TextField";
@@ -72,7 +73,6 @@ function Canvas(props){
             )
         }
         else if (element.inputType === "datalist") {
-            console.log("sadjnas")
             return (
                 <div>
                     <input list={element.list} className="border-2 border-gray-400 w-[100%] h-8 p-2"/>
@@ -92,7 +92,7 @@ function Canvas(props){
                         <label>Option-1</label>
                     </div>
                     <div>
-                        <input type="radio"  name="opt-1" className='mr-1'/>
+                        <input type="checkbox"  name="opt-2" className='mr-1'/>
                         <label>Option-2</label>
                     </div>
                 </>
@@ -107,7 +107,7 @@ function Canvas(props){
         id: 'canvas',
       });
     return (
-        <Card className="min-h-full border border-gray-400 p-4" ref={setNodeRef}>        
+        <Card className="h-full border border-gray-400 p-4" ref={setNodeRef}>        
             {props.canvasItems.map((item, index) => (
                 <div key={index} className="flex flex-col w-[100%]">
                     <label>{item.label}</label>
@@ -149,48 +149,53 @@ function FormPage() {
   }
 
   const handleDragStart = (event) => {
-    const inputType = event.active.id.split("-")[0];
-    console.log(`inputType: ${inputType}`)
-    if (inputType === "textfield") {
-        setDraggedElement(<TextField isDragging={true}/>);
-    }
-    else if(inputType === "emailfield"){
-        setDraggedElement(<EmailField isDragging={true}/>)
-    }
-    else if (inputType === "radiofield") {
-        setDraggedElement(<RadioField isDragging={true}/>)
-    }
-    else if (inputType === "textareafield") {
-        setDraggedElement(<TextAreaField isDragging={true}/>)
-    }
-    else if (inputType === "numberfield") {
-        setDraggedElement(<NumberField isDragging={true}/>)
-    }
-    else if (inputType === 'telfield') {
-        setDraggedElement(<TelField isDragging={true}/>)
-    }
-    else if (inputType === 'selectfield') {
-        setDraggedElement(<SelectField isDragging={true}/>)
-    }
-    else if (inputType === 'filefield') {
-        setDraggedElement(<FileField isDragging={true}/>)
-    }
-    else if (inputType === 'datalistfield') {
-        setDraggedElement(<DataListField isDragging={true}/>)
-    }
-    else if (inputType === 'checkboxfield') {
-        setDraggedElement(<CheckBoxField isDragging={true}/>)
-    }
-    console.log(`event.active.id: ${event.active.id}`);
-};
+        const inputType = event.active.id.split("-")[0];
+        console.log(`inputType: ${inputType}`)
+        if (inputType === "textfield") {
+            setDraggedElement(<TextField isDragging={true}/>);
+        }
+        else if(inputType === "emailfield"){
+            setDraggedElement(<EmailField isDragging={true}/>)
+        }
+        else if (inputType === "radiofield") {
+            setDraggedElement(<RadioField isDragging={true}/>)
+        }
+        else if (inputType === "textareafield") {
+            setDraggedElement(<TextAreaField isDragging={true}/>)
+        }
+        else if (inputType === "numberfield") {
+            setDraggedElement(<NumberField isDragging={true}/>)
+        }
+        else if (inputType === 'telfield') {
+            setDraggedElement(<TelField isDragging={true}/>)
+        }
+        else if (inputType === 'selectfield') {
+            setDraggedElement(<SelectField isDragging={true}/>)
+        }
+        else if (inputType === 'filefield') {
+            setDraggedElement(<FileField isDragging={true}/>)
+        }
+        else if (inputType === 'datalistfield') {
+            setDraggedElement(<DataListField isDragging={true}/>)
+        }
+        else if (inputType === 'checkboxfield') {
+            setDraggedElement(<CheckBoxField isDragging={true}/>)
+        }
+        console.log(`event.active.id: ${event.active.id}`);
+    };
+
+  const publishForm = (e) => {
+    console.log(canvasItems);
+  }
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="flex justify-center gap-4 items-center h-[90vh] p-4">
+        <div className="flex justify-center gap-4 items-center h-screen p-4">
 
             {/* Left part */}
-            <div className="w-3/4 h-full">
+            <div className="w-3/4 h-full flex flex-col gap-2">
                 <Canvas canvasItems={canvasItems}/>
+                <Button onClick={publishForm}>Publish Form</Button>
             </div>
 
             {/* Right part */}    

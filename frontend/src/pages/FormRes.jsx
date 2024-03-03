@@ -1,8 +1,29 @@
 import DataTable from "@/components/common/DataTable";
 import StatsCard from "@/components/common/StatsCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const FormRes = () => {
+
+  const fetchData = async () => {
+    const url = `http://127.0.0.1:3000/responses/${id}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("An error occured");
+      } 
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchData();
+  }, [])
+
+  const { id } = useParams();
   const [statsData, setStatsData] = useState([
     {
       title: "Total visits",

@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { useNavigate } from "react-router-dom";
 
-function PublishedFormsBtn({ title, description, timestamp }) {
+function PublishedFormsBtn({ id, title, description, timestamp }) {
+  const navigate = useNavigate();
   return (
     <Card className="h-fit w-full">
       <CardHeader>
@@ -22,7 +24,7 @@ function PublishedFormsBtn({ title, description, timestamp }) {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" onClick={()=>navigate(`/form-res/${id}`)}>
           View Submissions
         </Button>
       </CardContent>

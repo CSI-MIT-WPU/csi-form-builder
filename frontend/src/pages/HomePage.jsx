@@ -1,27 +1,32 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateFormBtn from "@/components/HomePage/CreateFormBtn";
 import PublishedFormsBtn from "@/components/HomePage/PublishedFormsBtn";
 import Toolbar from "@/components/HomePage/Toolbar";
 import StatsCard from "@/components/common/StatsCard";
 
 const HomePage = () => {
-  const [search, setSearch] = useState("");
 
-  const [publishedForms, setPublishedForms] = useState([
-    {
-      id: 1,
-      title: "titleone",
-      description: "description for form 1",
-      timestamp: new Date(),
-    },
-    {
-      id: 2,
-      title: "titletwo",
-      description: "description fro form 2",
-      timestamp: new Date(),
-    },
-  ]);
+  const fetchData = async () => {
+    const url = "http://127.0.0.1:3000/forms/all";
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("An error occured");
+      } 
+      const data = await response.json();
+      setPublishedForms(data.forms);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchData();
+  }, [])
+
+  const [search, setSearch] = useState("");
+  const [publishedForms, setPublishedForms] = useState([]);
 
   const [statsData, setStatsData] = useState([
     {
@@ -94,14 +99,17 @@ const HomePage = () => {
               ? form
               : form.title.toLowerCase().includes(search);
           })
-          .map((form) => (
-            <PublishedFormsBtn
-              key={form.id}
-              title={form.title}
-              description={form.description}
-              timestamp={form.timestamp}
-            />
-          ))}
+           .map((form) => (            
+              <PublishedFormsBtn
+                key={form.form_id}
+                id={form.form_id}
+                title={form.form_title}
+                description={`${form.team} department`}
+                timestamp={new Date(form.createdAt)}
+              />
+            )
+          )
+        }
       </div>
     </>
   );
