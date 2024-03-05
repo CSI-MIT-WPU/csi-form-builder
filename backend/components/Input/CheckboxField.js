@@ -10,6 +10,7 @@ class CheckboxField{
         this.value = value;
         this.label = label;
         this.required = required;
+        this.type = "checkbox";
     }
 
     //checks if required

@@ -10,6 +10,7 @@ class FileField{
         this.maxSize = maxSize;
         this.label = label;
         this.required = required;
+        this.type = "file";
     }
 
     static checkValidity(val, required){

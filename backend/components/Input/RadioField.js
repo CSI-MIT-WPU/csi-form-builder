@@ -10,6 +10,7 @@ class RadioField{
         this.options = options;
         this.label = label;
         this.required = required;
+        this.type = "radio";
     }
 
     //checks if required and if value is present in options

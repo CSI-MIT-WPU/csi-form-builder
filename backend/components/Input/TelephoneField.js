@@ -10,6 +10,7 @@ class TelephoneField{
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
+        this.type = "telephone";
     }
 
     //checks if required

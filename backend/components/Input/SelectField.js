@@ -10,6 +10,7 @@ class SelectField{
         this.options = options;
         this.label = label;
         this.required = required;
+        this.type = "select";
     }
 
     //checks if required and if value is present in options

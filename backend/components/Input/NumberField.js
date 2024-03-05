@@ -14,6 +14,7 @@ class NumberField{
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
+        this.type = "number";
     }
 
     //checks for range and required

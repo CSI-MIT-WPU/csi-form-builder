@@ -14,6 +14,7 @@ class TextareaField{
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
+        this.type = "textarea";
     }
 
     //checks for length range and required

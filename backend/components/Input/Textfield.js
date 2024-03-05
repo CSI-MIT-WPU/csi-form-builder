@@ -14,6 +14,7 @@ class TextField{
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
+        this.type = "textfield";
     }
 
 

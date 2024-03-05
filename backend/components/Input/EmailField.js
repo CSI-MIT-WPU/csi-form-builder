@@ -12,6 +12,7 @@ class EmailField{
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
+        this.type = "email";
     }
     
     //checks for email and required
