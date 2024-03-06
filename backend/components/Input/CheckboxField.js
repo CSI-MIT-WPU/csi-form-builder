@@ -5,18 +5,23 @@ class CheckboxField{
      * @param {String} label
      * @param {Boolean} required
     */
-    constructor(name, value, label, required){
+    constructor(name, options, label, required){
         this.name = name;
-        this.value = value;
+        this.options = options;
         this.label = label;
         this.required = required;
         this.type = "checkbox";
     }
 
-    //checks if required
-    static checkValidity(val, required){
-        if (required && val === "" || val === null) {
-            return false;
+    //checks if required and if value is present in options
+    static checkValidity(val, options, required){
+        for (let i = 0; i < val.length; i++) {
+            if (required && val[i] === "" || val[i] === null) {
+                return false;
+            }
+            else if (!options.includes(val[i])) {
+                return false;
+            }
         }
         return true;
     }

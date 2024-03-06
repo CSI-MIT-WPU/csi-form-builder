@@ -89,7 +89,7 @@ const validateResponse = async (req, res, next) => {
             }
             else if (field.type === "checkbox") {
                 const value = field[inputFields[i].name];
-                const isValid = CheckboxField.checkValidity(value, inputFields[i].required);
+                const isValid = CheckboxField.checkValidity(value, inputFields[i].options, inputFields[i].required);
                 if (!isValid) {
                     return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
                 }

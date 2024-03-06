@@ -40,7 +40,7 @@ function generateFields(fields) {
             content.push(new DatalistField(field.name,field.options, field.label, field.required));
         }
         else if (field.type == "checkbox") {
-            content.push(new CheckboxField(field.name,field.value, field.label, field.required));
+            content.push(new CheckboxField(field.name,field.options, field.label, field.required));
         }
     });
     return content;
