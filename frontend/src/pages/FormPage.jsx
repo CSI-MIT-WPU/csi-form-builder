@@ -1,28 +1,36 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {DndContext, useDroppable, DragOverlay} from '@dnd-kit/core';
 
-import TextField from "@/InputFields/TextField";
-import EmailField from "@/InputFields/EmailField";
-import RadioField from "@/InputFields/RadioField";
-import TextAreaField from "@/InputFields/TextAreaField";
-import NumberField from "@/InputFields/NumberField";
-import TelField from "@/InputFields/TelePhoneField";
-import SelectField from "@/InputFields/SelectField";
-import FileField from "@/InputFields/FileField";
-import DataListField from "@/InputFields/DataListField";
-import CheckBoxField from "@/InputFields/CheckBoxField";
-
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 
+import { 
+    TextField,
+    TextAreaField,
+    TelField,
+    SelectField,
+    RadioField,
+    NumberField,
+    FileField,
+    EmailField,
+    DataListField,
+    CheckBoxField 
+} from "@/InputFields/ListFields";
+
+import { 
+    CanvasTextField,  
+    CanvasCheckBoxField, 
+    CanvasDataListField, 
+    CanvasFileField, 
+    CanvasNumberField,
+    CanvasRadioField, 
+    CanvasSelectField,
+    CanvasTextAreaField 
+} from "@/InputFields/CanvasFields";
 
 function List(props) {
     return (
@@ -48,95 +56,44 @@ function List(props) {
 }
 
 function Canvas(props){
-
     function renderElement(element){
         if (element.inputType === "text" || element.inputType === "tel" || element.inputType === "email") {
-            return <Input type={element.inputType} name={element._name} id={element.id} placeholder={element.placeholder} />
+            return <CanvasTextField element={element}/>
         }
         else if (element.inputType === "textarea") {
-            return <Textarea name={element._name} id={element.id} cols="30" rows="8"/>
+            return <CanvasTextAreaField element={element}/>
         }
         else if (element.inputType === "select") {
-            return (
-                <Select>
-                    <SelectTrigger className="w-[100%]">
-                        <SelectValue placeholder={"Select one of these..."} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {
-                            element.options.map((option, index)=>(
-                                <SelectItem value={option} key={index}>{option}</SelectItem>
-                            ))
-                        }
-                    </SelectContent>
-                </Select>
-            )
+            return <CanvasSelectField element={element}/>
         }
         else if (element.inputType === "radio") {
-            return (
-                <>
-                    <RadioGroup defaultValue="comfortable">
-                        {
-                            element.options.map((option, index)=>(
-                                <div className="flex items-center space-x-2" key={index}>
-                                    <RadioGroupItem value={`${option}-${index}`} id={`${option}-${index}`} />
-                                    <Label htmlFor={`${option}-${index}`}>{`Option-${index+1}`}</Label>
-                                </div>
-                            ))
-                        }
-                    </RadioGroup>
-                </>
-            )
+            return <CanvasRadioField element={element}/>
         }
         else if (element.inputType === "number") {
-            return <Input type="number" name={element._name} id={element.id} placeholder={element.placeholder}/>
+            return <CanvasNumberField element={element}/>
         }
         else if (element.inputType === "file") {
-            return <Input type="file" name={element._name} id={element.id} />
+            return <CanvasFileField element={element}/>
         }
         else if (element.inputType === "datalist") {
-            return (
-                <div>
-                    <input list={element.list} className="border-2 border-gray-400 w-[100%] h-8 p-2"/>
-                    <datalist id={element.list}>
-                        {
-                            element.options.map((option, index) => (
-                                <option key={index} value={option}/>
-                            ))
-                        }
-                    </datalist>
-                </div>
-            )
+            return <CanvasDataListField element={element}/>
         }
         else if (element.inputType === "checkbox") {
-            return (
-                <>
-                    {
-                        element.options.map((option, index) => (
-                            <div className="flex items-center space-x-2" key={index}>
-                                <Checkbox id={`opt-${index}`} className="mb-1"/>
-                                <label
-                                    htmlFor={`opt-${index}`}
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    {option}
-                                </label>
-                            </div>
-                        ))
-                    }
-                </>
-            )
+            return <CanvasCheckBoxField element={element}/>
         }
     }
 
     const {setNodeRef} = useDroppable({
         id: 'canvas',
-      });
+    });
     return (
         <Card className="h-full border border-gray-400 p-4" ref={setNodeRef}>        
             {props.canvasItems.map((item, index) => (
-                <div key={index} className="flex flex-col w-[100%]">
-                    <Label>{item.label}</Label>
-                    { renderElement(item) }
+                <div key={index} className="flex flex-col w-[100%] mb-2">
+                    <div>
+                        <Label>{item.label}</Label>
+                        { renderElement(item) }
+                    </div>
                 </div>
             ))}
         </Card>
