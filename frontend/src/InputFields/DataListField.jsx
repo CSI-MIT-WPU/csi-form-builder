@@ -1,3 +1,4 @@
+import { Label } from '@/components/ui/label';
 import {useDraggable} from '@dnd-kit/core';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,7 +9,7 @@ export default function DataListField(props) {
   return (
     <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { scale: '1.1', cursor:'grabbing' } : {  }}>
         <div className="flex flex-col ">
-            <label>Datalist</label>
+            <Label>Datalist</Label>
             <input list='list' className='border-2 border-gray-400 h-10 p-1'/>
             <datalist id='list'>
                 <option value="val1"/>

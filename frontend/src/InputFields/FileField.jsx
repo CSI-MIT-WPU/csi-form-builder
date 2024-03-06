@@ -1,3 +1,5 @@
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {useDraggable} from '@dnd-kit/core';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,9 +9,9 @@ export default function FileField(props) {
     });
 
   return (
-    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { scale: '1.1', cursor:'grabbing' } : {  }}>
-        <label>File</label>
-        <input type="file" className='w-[100%] h-10 p-1' name="file"/>
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? {cursor:'grabbing' } : {  }}>
+        <Label>File</Label>
+        <Input type="file" name="file"/>
     </div>
   )
 }

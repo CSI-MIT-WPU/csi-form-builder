@@ -1,3 +1,5 @@
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {useDraggable} from '@dnd-kit/core';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,9 +9,9 @@ export default function TextAreaField(props) {
     });
 
   return (
-    <div ref={setNodeRef}  {...listeners} {...attributes} className='flex flex-col' style={props.isDragging ? { scale: '1.1', cursor:'grabbing' } : {  }} >
-        <label>Textarea</label>
-        <textarea name="txtArea" cols="30" rows="10" className='border-2 rounded border-gray-400 p-1' style={{resize:"none"}}></textarea>
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? {cursor:'grabbing' } : {  }} >
+        <Label>Textarea</Label>
+        <Textarea name="txtArea" placeholder="A text area"/>
     </div>
   )
 }

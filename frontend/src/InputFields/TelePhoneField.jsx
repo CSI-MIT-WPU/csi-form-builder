@@ -1,3 +1,5 @@
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {useDraggable} from '@dnd-kit/core';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,9 +9,9 @@ export default function TelField(props) {
     });
 
   return (
-    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { scale: '1.1', cursor:'grabbing' } : {  }}>
-        <label>Telephone</label>
-        <input type="tel" className='border-2 rounded border-gray-400 w-[100%] h-10 p-1' name="telephone" placeholder='9921162409'/>
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { cursor:'grabbing' } : {  }}>
+        <Label>Telephone</Label>
+        <Input type="tel" name="telephone" placeholder='9921162409'/>
     </div>
   )
 }

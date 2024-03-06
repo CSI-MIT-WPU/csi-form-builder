@@ -16,6 +16,14 @@ import FileField from "@/InputFields/FileField";
 import DataListField from "@/InputFields/DataListField";
 import CheckBoxField from "@/InputFields/CheckBoxField";
 
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+
+
 function List(props) {
     return (
         <div className="flex flex-col justify-between h-full">
@@ -43,27 +51,48 @@ function Canvas(props){
 
     function renderElement(element){
         if (element.inputType === "text" || element.inputType === "tel" || element.inputType === "email") {
-            return <input type={element.inputType} name={element._name} id={element.id} placeholder={element.placeholder} className="border-2 border-gray-400" />
+            return <Input type={element.inputType} name={element._name} id={element.id} placeholder={element.placeholder} />
         }
         else if (element.inputType === "textarea") {
-            return <textarea name={element._name} id={element.id} cols="30" rows="8" className="border-2 border-gray-400 resize-none"></textarea>
+            return <Textarea name={element._name} id={element.id} cols="30" rows="8"/>
         }
-        else if (element.inputType === "select" || element.inputType === "radio") {
+        else if (element.inputType === "select") {
             return (
-                <select name="select" className='border-2 rounded border-gray-400 h-10 p-1'>
-                    {
-                        element.options.map((option, index)=>(
-                            <option value={option} key={index}>{option}</option>
-                        ))
-                    }
-                </select>
+                <Select>
+                    <SelectTrigger className="w-[100%]">
+                        <SelectValue placeholder={"Select one of these..."} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {
+                            element.options.map((option, index)=>(
+                                <SelectItem value={option} key={index}>{option}</SelectItem>
+                            ))
+                        }
+                    </SelectContent>
+                </Select>
+            )
+        }
+        else if (element.inputType === "radio") {
+            return (
+                <>
+                    <RadioGroup defaultValue="comfortable">
+                        {
+                            element.options.map((option, index)=>(
+                                <div className="flex items-center space-x-2" key={index}>
+                                    <RadioGroupItem value={`${option}-${index}`} id={`${option}-${index}`} />
+                                    <Label htmlFor={`${option}-${index}`}>{`Option-${index+1}`}</Label>
+                                </div>
+                            ))
+                        }
+                    </RadioGroup>
+                </>
             )
         }
         else if (element.inputType === "number") {
-            return <input type="number" name={element._name} id={element.id} placeholder={element.placeholder} className="border-2 border-gray-400"/>
+            return <Input type="number" name={element._name} id={element.id} placeholder={element.placeholder}/>
         }
         else if (element.inputType === "file") {
-            return <input type="file" name={element._name} id={element.id} />
+            return <Input type="file" name={element._name} id={element.id} />
         }
         else if (element.inputType === "datalist") {
             return (
@@ -84,9 +113,13 @@ function Canvas(props){
                 <>
                     {
                         element.options.map((option, index) => (
-                            <div key={index}>
-                                <input type="checkbox"  name={`${option}-${index}`} className='mr-1'/>
-                                <label>{option}</label>
+                            <div className="flex items-center space-x-2" key={index}>
+                                <Checkbox id={`opt-${index}`} className="mb-1"/>
+                                <label
+                                    htmlFor={`opt-${index}`}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    {option}
+                                </label>
                             </div>
                         ))
                     }
@@ -102,7 +135,7 @@ function Canvas(props){
         <Card className="h-full border border-gray-400 p-4" ref={setNodeRef}>        
             {props.canvasItems.map((item, index) => (
                 <div key={index} className="flex flex-col w-[100%]">
-                    <label>{item.label}</label>
+                    <Label>{item.label}</Label>
                     { renderElement(item) }
                 </div>
             ))}
