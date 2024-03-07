@@ -7,6 +7,7 @@ import {DndContext, useDroppable, DragOverlay} from '@dnd-kit/core';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 import { 
     TextField,
@@ -31,6 +32,16 @@ import {
     CanvasSelectField,
     CanvasTextAreaField 
 } from "@/InputFields/CanvasFields";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
 
 function List(props) {
     return (
@@ -102,6 +113,7 @@ function Canvas(props){
 
 function FormPage() {
   const [canvasItems, setCanvasItems] = useState([]);
+  const [open, setOpen] = useState(false);
   const [draggedElement, setDraggedElement] = useState(null);
 
   function setElementData(inputType){
@@ -221,6 +233,12 @@ function FormPage() {
     const inputType = draggedElement.type.name;
     console.log(`type of input: ${inputType}`)
     if (over && over.id === "canvas") {
+
+
+        //ADD MODAL LOGIC
+
+        setOpen(true);
+
         setCanvasItems([...canvasItems, setElementData(inputType)]);
     }
     console.log(canvasItems)
@@ -262,13 +280,78 @@ function FormPage() {
         console.log(`event.active.id: ${event.active.id}`);
     };
 
-  const publishForm = (e) => {
+  const publishForm =  async (e) => {
+    // const url = "http://127.0.0.1:3000/forms";
+    // const response = await fetch(url, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //         form_title: "form from frontend",
+    //         team: "samit", 
+    //         input_fields: canvasItems
+    //     })
+    // })
     console.log(canvasItems);
+  }
+
+  const fieldAttributeMap = {
+    _name: "Name",
+    label: "Label",
+    required: "Required",
+    placeholder: "Placeholder",
+    minLen: "Minimum Length",
+    maxLen: "Maximum Length",
+    minVal: "Minimum Value",
+    maxVal: "Maxiumum Value",
+    maxSize: "Maximum Size",
+    options: "Options"
   }
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="flex justify-center gap-4 items-center h-screen p-4">
+            {
+                canvasItems.length > 0 ? (
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Edit profile</DialogTitle>
+                                <DialogDescription>
+                                    Make changes to your profile here. Click save when you're done.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                {
+                                    Object.keys(canvasItems[canvasItems.length-1]).map((key, index)=>{
+                                        console.log(`${key}: ${canvasItems[canvasItems.length-1][key]}`);
+                                        if (key === "inputType" || key === "id" || key === "list") {
+                                            return null;
+                                        } else {
+                                            return (
+                                                <div className="grid grid-cols-4 items-center gap-4" key={index}>
+                                                    <Label htmlFor={key} className="text-right">
+                                                        {fieldAttributeMap[key]}
+                                                    </Label>
+                                                    <Input
+                                                        id={key}
+                                                        defaultValue={canvasItems[canvasItems.length - 1][key]}
+                                                        className="col-span-3"
+                                                    />
+                                                </div>
+                                            );
+                                        }
+                                    })
+                                }
+                            </div>
+                            <DialogFooter>
+                                <Button type="submit">Save changes</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                ) : (
+                    <div></div>
+                )
+            }
 
             {/* Left part */}
             <div className="w-3/4 h-full flex flex-col gap-2">

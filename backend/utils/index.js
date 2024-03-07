@@ -11,38 +11,40 @@ const CheckboxField = require('../components/Input/CheckboxField');
 
 function generateFields(fields) {
     let content = [];
+    console.log(`${fields}`)
     fields.forEach(field => {
-        if (field.type == "textfield") {
-            content.push(new TextField(field.name,field.minLen, field.maxLen, field.label, field.placeholder, field.required));
+        if (field.inputType == "textfield") {
+            content.push(new TextField(field._name,field.minLen, field.maxLen, field.label, field.placeholder, field.required));
         }
-        else if (field.type == "textarea") {
-            content.push(new TextareaField(field.name, field.minLen, field.maxLen, field.label, field.placeholder, field.required));
+        else if (field.inputType == "textarea") {
+            content.push(new TextareaField(field._name, field.minLen, field.maxLen, field.label, field.placeholder, field.required));
         }
-        else if (field.type == "telephone") {
-            content.push(new TelephoneField(field.name, field.label,  field.placeholder,  field.required));
+        else if (field.inputType == "telephone") {
+            content.push(new TelephoneField(field._name, field.label,  field.placeholder,  field.required));
         }
-        else if (field.type == "select") {
-            content.push(new SelectField(field.name, field.options, field.label, field.required));
+        else if (field.inputType == "select") {
+            content.push(new SelectField(field._name, field.options, field.label, field.required));
         }
-        else if (field.type == "radio") {
-            content.push(new RadioField(field.name, field.options, field.label, field.required));
+        else if (field.inputType == "radio") {
+            content.push(new RadioField(field._name, field.options, field.label, field.required));
         }
-        else if (field.type == "number") {
-            content.push(new NumberField( field.name, field.minVal,  field.maxVal,  field.label,  field.placeholder,  field.required));
+        else if (field.inputType == "number") {
+            content.push(new NumberField( field._name, field.minVal,  field.maxVal,  field.label,  field.placeholder,  field.required));
         }
-        else if (field.type == "file") {
-            content.push(new FileField(field.name,field.maxSize, field.label, field.required));
+        else if (field.inputType == "file") {
+            content.push(new FileField(field._name,field.maxSize, field.label, field.required));
         }
-        else if (field.type == "email") {
-            content.push(new EmailField(field.name,field.label, field.placeholder, field.required));
+        else if (field.inputType == "email") {
+            content.push(new EmailField(field._name,field.label, field.placeholder, field.required));
         }
-        else if (field.type == "datalist") {
-            content.push(new DatalistField(field.name,field.options, field.label, field.required));
+        else if (field.inputType == "datalist") {
+            content.push(new DatalistField(field._name,field.options, field.label, field.required));
         }
-        else if (field.type == "checkbox") {
-            content.push(new CheckboxField(field.name,field.options, field.label, field.required));
+        else if (field.inputType == "checkbox") {
+            content.push(new CheckboxField(field._name,field.options, field.label, field.required));
         }
     });
+    console.log(content);
     return content;
 }
 

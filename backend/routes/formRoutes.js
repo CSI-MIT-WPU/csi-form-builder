@@ -18,8 +18,9 @@ router.get("/all", async (req, res) => {
 //POSTS FORM 
 router.post("/", async(req, res) => {
     try {
-        const {form_title, team, fields} = req.body;
-        let content = generateFields(fields);
+        const {form_title, team, input_fields} = req.body;
+        console.log(req.body);
+        let content = generateFields(input_fields);
         const newForm = await Form.create({form_title:form_title, team:team, input_fields:content});
         res.status(200).json({message:newForm});
     } catch (error) {
