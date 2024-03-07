@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {DndContext, useDroppable, DragOverlay} from '@dnd-kit/core';
 
 import { Card } from "@/components/ui/card";
@@ -68,28 +69,28 @@ function List(props) {
 
 function Canvas(props){
     function renderElement(element){
-        if (element.inputType === "text" || element.inputType === "tel" || element.inputType === "email") {
+        if (element.type === "text" || element.type === "tel" || element.type === "email") {
             return <CanvasTextField element={element}/>
         }
-        else if (element.inputType === "textarea") {
+        else if (element.type === "textarea") {
             return <CanvasTextAreaField element={element}/>
         }
-        else if (element.inputType === "select") {
+        else if (element.type === "select") {
             return <CanvasSelectField element={element}/>
         }
-        else if (element.inputType === "radio") {
+        else if (element.type === "radio") {
             return <CanvasRadioField element={element}/>
         }
-        else if (element.inputType === "number") {
+        else if (element.type === "number") {
             return <CanvasNumberField element={element}/>
         }
-        else if (element.inputType === "file") {
+        else if (element.type === "file") {
             return <CanvasFileField element={element}/>
         }
-        else if (element.inputType === "datalist") {
+        else if (element.type === "datalist") {
             return <CanvasDataListField element={element}/>
         }
-        else if (element.inputType === "checkbox") {
+        else if (element.type === "checkbox") {
             return <CanvasCheckBoxField element={element}/>
         }
     }
@@ -112,199 +113,225 @@ function Canvas(props){
 }
 
 function FormPage() {
-  const [canvasItems, setCanvasItems] = useState([]);
   const [open, setOpen] = useState(false);
+  const [canvasItems, setCanvasItems] = useState([]);
   const [draggedElement, setDraggedElement] = useState(null);
+  const [fieldInfo, setFieldInfo] = useState(null);
+  const [formName, setFormName] = useState("");
+  const [team, setTeam] = useState("");
 
-  function setElementData(inputType){
-    console.log(`inside set element data: ${inputType}`)
+  const navigate = useNavigate();
+
+  function setElementData(type){
     let element = {}
-    if (inputType === "TextField") {
+    if (type === "TextField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,                                       
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,                                       
             minLen: 5,
             maxLen: 12,
-            label:inputType,                                                                      
+            label:type,                                                                      
             placeholder:"Placeholder",
             required: false,
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "TextAreaField") {
+    else if (type === "TextAreaField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,                                       
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,                                       
             minLen: 50,
             maxLen: 120,
-            label:inputType,                                                                      
+            label:type,                                                                      
             placeholder:"Placeholder",
             required: false,
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "TelField") {
+    else if (type === "TelField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,                                       
-            label:inputType,                                                                      
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,                                       
+            label:type,                                                                      
             placeholder:"9921162409",
             required: false,
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "SelectField") {
+    else if (type === "SelectField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,  
-            label:inputType,
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,  
+            label:type,
             required: false,
             options: ["Option-1", "Option-2", "Option-3"],
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "RadioField") {
+    else if (type === "RadioField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,
-            label:inputType,
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            label:type,
             required: false,
             options: ["Option-1", "Option-2", "Option-3"],
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "NumberField") {
+    else if (type === "NumberField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,
-            label:inputType,
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            label:type,
             required: false,
             minVal: 0,
             maxVal: 99,
             placeholder: "10",
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "FileField") {
+    else if (type === "FileField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,
-            label:inputType,
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            label:type,
             required: false,
             maxSize: 300,
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "EmailField") {
+    else if (type === "EmailField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,
-            label:inputType,
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            label:type,
             required: false,
             placeholder: "abc@gmail.com",
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
-    else if (inputType === "DataListField") {
+    else if (type === "DataListField") {
         element = {
-            id:`${inputType}-${Date.now()}`,
-            _name:`${inputType}-${Date.now()}`,
+            id:`${type}-${Date.now()}`,
+            name:`${type}-${Date.now()}`,
             options: ["abc", "def", "xyz"],
-            label:inputType,
+            label:type,
             required: false,
             list:`list${Date.now()}`,
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase(),
+            type:type.slice(0, type.indexOf("Field")).toLowerCase(),
         }
     }
-    else if (inputType === "CheckBoxField") {
+    else if (type === "CheckBoxField") {
         element = {
-            id:`${inputType}-${Date.now()}`,                                          
-            _name:`${inputType}-${Date.now()}`,
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
             options: ["Option-A", "Option-B", "Option-C"],
-            label:inputType,
+            label:type,
             required: false,
-            inputType:inputType.slice(0, inputType.indexOf("Field")).toLowerCase()
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
     return element;
   }
 
   function handleDragEnd({over}){
-    const inputType = draggedElement.type.name;
-    console.log(`type of input: ${inputType}`)
+    const type = draggedElement.type.name;
     if (over && over.id === "canvas") {
-
-
-        //ADD MODAL LOGIC
-
         setOpen(true);
-
-        setCanvasItems([...canvasItems, setElementData(inputType)]);
+        const elementData = setElementData(type);
+        setCanvasItems([...canvasItems, elementData]);
+        setFieldInfo(elementData);
     }
-    console.log(canvasItems)
   }
 
   const handleDragStart = (event) => {
-        const inputType = event.active.id.split("-")[0];
-        console.log(`inputType: ${inputType}`)
-        if (inputType === "textfield") {
+        const type = event.active.id.split("-")[0];
+        if (type === "textfield") {
             setDraggedElement(<TextField isDragging={true}/>);
         }
-        else if(inputType === "emailfield"){
+        else if(type === "emailfield"){
             setDraggedElement(<EmailField isDragging={true}/>)
         }
-        else if (inputType === "radiofield") {
+        else if (type === "radiofield") {
             setDraggedElement(<RadioField isDragging={true}/>)
         }
-        else if (inputType === "textareafield") {
+        else if (type === "textareafield") {
             setDraggedElement(<TextAreaField isDragging={true}/>)
         }
-        else if (inputType === "numberfield") {
+        else if (type === "numberfield") {
             setDraggedElement(<NumberField isDragging={true}/>)
         }
-        else if (inputType === 'telfield') {
+        else if (type === 'telfield') {
             setDraggedElement(<TelField isDragging={true}/>)
         }
-        else if (inputType === 'selectfield') {
+        else if (type === 'selectfield') {
             setDraggedElement(<SelectField isDragging={true}/>)
         }
-        else if (inputType === 'filefield') {
+        else if (type === 'filefield') {
             setDraggedElement(<FileField isDragging={true}/>)
         }
-        else if (inputType === 'datalistfield') {
+        else if (type === 'datalistfield') {
             setDraggedElement(<DataListField isDragging={true}/>)
         }
-        else if (inputType === 'checkboxfield') {
+        else if (type === 'checkboxfield') {
             setDraggedElement(<CheckBoxField isDragging={true}/>)
         }
-        console.log(`event.active.id: ${event.active.id}`);
     };
 
-  const publishForm =  async (e) => {
-    // const url = "http://127.0.0.1:3000/forms";
-    // const response = await fetch(url, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //         form_title: "form from frontend",
-    //         team: "samit", 
-    //         input_fields: canvasItems
-    //     })
-    // })
-    console.log(canvasItems);
-  }
-
-  const fieldAttributeMap = {
-    _name: "Name",
-    label: "Label",
-    required: "Required",
-    placeholder: "Placeholder",
-    minLen: "Minimum Length",
+    
+    const fieldAttributeMap = {
+        name: "Name",
+        label: "Label",
+        required: "Required",
+        placeholder: "Placeholder",
+        minLen: "Minimum Length",
     maxLen: "Maximum Length",
     minVal: "Minimum Value",
     maxVal: "Maxiumum Value",
     maxSize: "Maximum Size",
     options: "Options"
+  }
+
+  const handleFieldChange = (e) => {
+    const field = e.target.id;
+    let value = e.target.value;
+    if (field === "options") {
+        let val = e.target.value.split(",");
+        value = val;
+    }
+    setFieldInfo({...fieldInfo, [field]:value});
+  }
+
+  const handleFieldUpdate = (e) => {
+    e.preventDefault();
+    const items = canvasItems;
+    items[items.length-1] = fieldInfo;
+    setOpen(false);
+  }
+
+
+  const handleFormNameChange = (e) => {
+    setFormName(e.target.value);
+  }
+
+  const handleTeamNameChange = (e) => {
+    setTeam(e.target.value);
+  }
+
+  const publishForm =  async (e) => {
+    const url = "http://127.0.0.1:3000/forms";
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            form_title: formName,
+            team: team, 
+            input_fields: canvasItems
+        })
+    })
+    if (response.ok) {
+        navigate("/home");
+    }
   }
 
   return (
@@ -320,32 +347,34 @@ function FormPage() {
                                     Make changes to your profile here. Click save when you're done.
                                 </DialogDescription>
                             </DialogHeader>
-                            <div className="grid gap-4 py-4">
-                                {
-                                    Object.keys(canvasItems[canvasItems.length-1]).map((key, index)=>{
-                                        console.log(`${key}: ${canvasItems[canvasItems.length-1][key]}`);
-                                        if (key === "inputType" || key === "id" || key === "list") {
-                                            return null;
-                                        } else {
-                                            return (
-                                                <div className="grid grid-cols-4 items-center gap-4" key={index}>
-                                                    <Label htmlFor={key} className="text-right">
-                                                        {fieldAttributeMap[key]}
-                                                    </Label>
-                                                    <Input
-                                                        id={key}
-                                                        defaultValue={canvasItems[canvasItems.length - 1][key]}
-                                                        className="col-span-3"
-                                                    />
-                                                </div>
-                                            );
-                                        }
-                                    })
-                                }
-                            </div>
-                            <DialogFooter>
-                                <Button type="submit">Save changes</Button>
-                            </DialogFooter>
+                            <form onSubmit={handleFieldUpdate}>
+                                <div className="grid gap-4 py-4">
+                                    {
+                                        Object.keys(canvasItems[canvasItems.length-1]).map((key, index)=>{
+                                            if (key === "type" || key === "id" || key === "list") {
+                                                return null;
+                                            } else {
+                                                return (
+                                                    <div className="grid grid-cols-4 items-center gap-4" key={index}>
+                                                        <Label htmlFor={key} className="text-right">
+                                                            {fieldAttributeMap[key]}
+                                                        </Label>
+                                                        <Input
+                                                            id={key}
+                                                            defaultValue={canvasItems[canvasItems.length - 1][key]}
+                                                            className="col-span-3"
+                                                            onChange={handleFieldChange}
+                                                        />
+                                                    </div>
+                                                );
+                                            }
+                                        })
+                                    }
+                                </div>
+                                <DialogFooter>
+                                    <Button type="submit">Save changes</Button>
+                                </DialogFooter>
+                            </form>
                         </DialogContent>
                     </Dialog>
                 ) : (
@@ -356,6 +385,10 @@ function FormPage() {
             {/* Left part */}
             <div className="w-3/4 h-full flex flex-col gap-2">
                 <Canvas canvasItems={canvasItems}/>
+                <Label>Enter form name</Label>
+                <Input onChange={handleFormNameChange} placeholder="Epic form"/>
+                <Label>Enter team name</Label>
+                <Input onChange={handleTeamNameChange} placeholder="Epic team"/>
                 <Button onClick={publishForm}>Publish Form</Button>
             </div>
 

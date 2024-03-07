@@ -31,13 +31,13 @@ import {
 
 function CanvasTextField({element}){
     return (
-        <Input type={element.inputType} name={element._name} id={element.id} placeholder={element.placeholder} />  
+        <Input type={element.type} name={element.name} id={element.id} placeholder={element.placeholder} />  
     )
 }
 
 function CanvasTextAreaField({element}){
     return (
-        <Textarea name={element._name} id={element.id} cols="30" rows="8"/>
+        <Textarea name={element.name} id={element.id} cols="30" rows="8"/>
     )
 }
 
@@ -66,7 +66,7 @@ function CanvasRadioField({element}){
                     element.options.map((option, index)=>(
                         <div className="flex items-center space-x-2" key={index}>
                             <RadioGroupItem value={`${option}-${index}`} id={`${option}-${index}`} />
-                            <Label htmlFor={`${option}-${index}`}>{`Option-${index+1}`}</Label>
+                            <Label htmlFor={`${option}-${index}`}>{option}</Label>
                         </div>
                     ))
                 }
@@ -77,13 +77,13 @@ function CanvasRadioField({element}){
 
 function CanvasNumberField({element}){
     return (
-        <Input type="number" name={element._name} id={element.id} placeholder={element.placeholder}/>
+        <Input type="number" name={element.name} id={element.id} placeholder={element.placeholder}/>
     )
 }
 
 function CanvasFileField({element}){
     return (
-        <Input type="file" name={element._name} id={element.id} />
+        <Input type="file" name={element.name} id={element.id} />
     )
 }
 
