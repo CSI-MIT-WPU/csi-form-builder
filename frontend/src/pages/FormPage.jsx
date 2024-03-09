@@ -21,7 +21,7 @@ import {
     EmailField,
     DataListField,
     CheckBoxField 
-} from "@/InputFields/ListFields";
+} from "@/FormPage/ListFields";
 
 import { 
     CanvasTextField,  
@@ -32,7 +32,7 @@ import {
     CanvasRadioField, 
     CanvasSelectField,
     CanvasTextAreaField 
-} from "@/InputFields/CanvasFields";
+} from "@/FormPage/CanvasFields";
 
 import {
     Dialog,
@@ -41,27 +41,26 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
   } from "@/components/ui/dialog"
 
 function List(props) {
     return (
-        <div className="flex flex-col justify-between h-full">
-            <div className="flex flex-col gap-4">
-                <div className=" font-light text-3xl text-center mb-3">Input Fields</div>
-                    <TextField/>
-                    <EmailField/>
-                    <NumberField/>
-                    <TelField/>
-                    <TextAreaField/>
-                    <SelectField/>
-                    <DataListField/>
-                    <RadioField/>
-                    <CheckBoxField/>
-                    <FileField/>
-                    <DragOverlay>
-                        {props.draggedElement}
-                    </DragOverlay>
+        <div className="flex flex-col h-full">
+            <div className="font-light text-3xl text-center mb-6">Input Fields</div>
+            <div className="md:grid md:grid-cols-2 grid-rows-5 justify-items-center  gap-y-4">
+                <TextField />
+                <EmailField />
+                <NumberField />
+                <TelField />
+                <TextAreaField />
+                <SelectField />
+                <DataListField />
+                <RadioField />
+                <CheckBoxField />
+                <FileField />
+                <DragOverlay>
+                    {props.draggedElement}
+                </DragOverlay>
             </div>
         </div>
     );
@@ -393,7 +392,7 @@ function FormPage() {
             </div>
 
             {/* Right part */}    
-            <div className="w-1/4 h-full overflow-y-scroll">
+            <div className="w-1/4 h-full">
                 <List draggedElement={draggedElement}/>
             </div>
         </div>
