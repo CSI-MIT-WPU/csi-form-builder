@@ -35,7 +35,7 @@ function TextField(props) {
             <CardContent className="p-2">
               <div className="flex flex-col h-[100%] justify-center items-center">
                 <MdOutlineTextFields className='w-[80%] h-[40%]'/>
-                <Label className='text-center text-lg'>Textfield</Label>
+                <Label className='text-center text-sm'>Textfield</Label>
               </div>
             </CardContent>
         </Card>

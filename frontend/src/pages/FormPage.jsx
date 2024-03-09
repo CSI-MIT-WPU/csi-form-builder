@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {DndContext, useDroppable, DragOverlay} from '@dnd-kit/core';
 
@@ -34,20 +34,15 @@ import {
     CanvasTextAreaField 
 } from "@/FormPage/CanvasFields";
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-  } from "@/components/ui/dialog"
+  import { MdEdit } from "react-icons/md";
+  import { FaTrash } from "react-icons/fa";
+import EditDialog from "@/FormPage/EditDialog";
 
 function List(props) {
     return (
         <div className="flex flex-col h-full">
             <div className="font-light text-3xl text-center mb-6">Input Fields</div>
-            <div className="md:grid md:grid-cols-2 grid-rows-5 justify-items-center  gap-y-4">
+            <div className="md:grid md:grid-cols-2 grid-rows-5 justify-items-center gap-y-4">
                 <TextField />
                 <EmailField />
                 <NumberField />
@@ -67,6 +62,11 @@ function List(props) {
 }
 
 function Canvas(props){
+
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [fieldInfo, setFieldInfo] = useState(null);
+
     function renderElement(element){
         if (element.type === "text" || element.type === "tel" || element.type === "email") {
             return <CanvasTextField element={element}/>
@@ -94,19 +94,51 @@ function Canvas(props){
         }
     }
 
+    function handleEdit(){
+        setFieldInfo(props.canvasItems[hoveredIndex]);
+        setOpen(true);
+        console.log(hoveredIndex)
+    }
+
     const {setNodeRef} = useDroppable({
         id: 'canvas',
     });
     return (
         <Card className="h-full border border-gray-400 p-4" ref={setNodeRef}>        
             {props.canvasItems.map((item, index) => (
-                <div key={index} className="flex flex-col w-[100%] mb-2">
+                <div key={index} className="flex flex-col w-[100%] mb-2" onMouseOver={()=>setHoveredIndex(index)} onMouseOut={()=>setHoveredIndex(null)}>
                     <div>
-                        <Label>{item.label}</Label>
+                        <div className="flex items-center justify-between mb-1" >
+                            <Label>{item.label}</Label>
+                            <div className="flex gap-4">
+                                {
+                                    hoveredIndex === index ? (
+                                        <>
+                                            <MdEdit onClick={handleEdit}/>
+                                            <FaTrash/>
+                                        </>
+                                    ) : 
+                                    null
+                                }
+                            </div>
+                        </div>
                         { renderElement(item) }
                     </div>
                 </div>
             ))}
+            {
+                open ? 
+                    <EditDialog 
+                        canvasItems={props.canvasItems}
+                        fieldInfo={fieldInfo} 
+                        open={open} 
+                        setOpen={setOpen} 
+                        setFieldInfo={setFieldInfo}
+                        editing={true}
+                        hoveredIndex={hoveredIndex}
+                    /> 
+                : null
+            }
         </Card>
     )
 }
@@ -277,38 +309,6 @@ function FormPage() {
         }
     };
 
-    
-    const fieldAttributeMap = {
-        name: "Name",
-        label: "Label",
-        required: "Required",
-        placeholder: "Placeholder",
-        minLen: "Minimum Length",
-    maxLen: "Maximum Length",
-    minVal: "Minimum Value",
-    maxVal: "Maxiumum Value",
-    maxSize: "Maximum Size",
-    options: "Options"
-  }
-
-  const handleFieldChange = (e) => {
-    const field = e.target.id;
-    let value = e.target.value;
-    if (field === "options") {
-        let val = e.target.value.split(",");
-        value = val;
-    }
-    setFieldInfo({...fieldInfo, [field]:value});
-  }
-
-  const handleFieldUpdate = (e) => {
-    e.preventDefault();
-    const items = canvasItems;
-    items[items.length-1] = fieldInfo;
-    setOpen(false);
-  }
-
-
   const handleFormNameChange = (e) => {
     setFormName(e.target.value);
   }
@@ -331,6 +331,7 @@ function FormPage() {
     if (response.ok) {
         navigate("/home");
     }
+    console.log(canvasItems)
   }
 
   return (
@@ -338,46 +339,16 @@ function FormPage() {
         <div className="flex justify-center gap-4 items-center h-screen p-4">
             {
                 canvasItems.length > 0 ? (
-                    <Dialog open={open} onOpenChange={setOpen}>
-                        <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle>Edit profile</DialogTitle>
-                                <DialogDescription>
-                                    Make changes to your profile here. Click save when you're done.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <form onSubmit={handleFieldUpdate}>
-                                <div className="grid gap-4 py-4">
-                                    {
-                                        Object.keys(canvasItems[canvasItems.length-1]).map((key, index)=>{
-                                            if (key === "type" || key === "id" || key === "list") {
-                                                return null;
-                                            } else {
-                                                return (
-                                                    <div className="grid grid-cols-4 items-center gap-4" key={index}>
-                                                        <Label htmlFor={key} className="text-right">
-                                                            {fieldAttributeMap[key]}
-                                                        </Label>
-                                                        <Input
-                                                            id={key}
-                                                            defaultValue={canvasItems[canvasItems.length - 1][key]}
-                                                            className="col-span-3"
-                                                            onChange={handleFieldChange}
-                                                        />
-                                                    </div>
-                                                );
-                                            }
-                                        })
-                                    }
-                                </div>
-                                <DialogFooter>
-                                    <Button type="submit">Save changes</Button>
-                                </DialogFooter>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
+                    <EditDialog 
+                        canvasItems={canvasItems} 
+                        fieldInfo={fieldInfo} 
+                        open={open} 
+                        setOpen={setOpen} 
+                        setFieldInfo={setFieldInfo}
+                        editing={false}
+                    />
                 ) : (
-                    <div></div>
+                    null
                 )
             }
 
