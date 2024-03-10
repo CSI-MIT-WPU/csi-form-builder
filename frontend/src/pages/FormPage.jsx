@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {DndContext, useDroppable, DragOverlay} from '@dnd-kit/core';
 
@@ -10,34 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-import { 
-    TextField,
-    TextAreaField,
-    TelField,
-    SelectField,
-    RadioField,
-    NumberField,
-    FileField,
-    EmailField,
-    DataListField,
-    CheckBoxField 
-} from "@/FormPage/ListFields";
 
-import { 
-    CanvasTextField,  
-    CanvasCheckBoxField, 
-    CanvasDataListField, 
-    CanvasFileField, 
-    CanvasNumberField,
-    CanvasRadioField, 
-    CanvasSelectField,
-    CanvasTextAreaField 
-} from "@/FormPage/CanvasFields";
+import EditDialog from "@/components/FormPage/EditDialog";
+import {TextField,TextAreaField,TelField,SelectField,RadioField,NumberField,FileField,EmailField,DataListField,CheckBoxField } from "@/components/FormPage/ListFields";
+import {CanvasTextField,CanvasCheckBoxField,CanvasDataListField,CanvasFileField,CanvasNumberField,CanvasRadioField,CanvasSelectField,CanvasTextAreaField} from "@/components/FormPage/CanvasFields";
 
-  import { MdEdit } from "react-icons/md";
-  import { FaTrash } from "react-icons/fa";
-import EditDialog from "@/FormPage/EditDialog";
+import { MdEdit } from "react-icons/md";
+import { FaTrash } from "react-icons/fa";
 
+import { setElementData } from "@/utilityFunctions";
 function List(props) {
     return (
         <div className="flex flex-col h-full">
@@ -153,118 +134,6 @@ function FormPage() {
 
   const navigate = useNavigate();
 
-  function setElementData(type){
-    let element = {}
-    if (type === "TextField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,                                       
-            minLen: 5,
-            maxLen: 12,
-            label:type,                                                                      
-            placeholder:"Placeholder",
-            required: false,
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "TextAreaField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,                                       
-            minLen: 50,
-            maxLen: 120,
-            label:type,                                                                      
-            placeholder:"Placeholder",
-            required: false,
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "TelField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,                                       
-            label:type,                                                                      
-            placeholder:"9921162409",
-            required: false,
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "SelectField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,  
-            label:type,
-            required: false,
-            options: ["Option-1", "Option-2", "Option-3"],
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "RadioField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,
-            label:type,
-            required: false,
-            options: ["Option-1", "Option-2", "Option-3"],
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "NumberField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,
-            label:type,
-            required: false,
-            minVal: 0,
-            maxVal: 99,
-            placeholder: "10",
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "FileField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,
-            label:type,
-            required: false,
-            maxSize: 300,
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "EmailField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,
-            label:type,
-            required: false,
-            placeholder: "abc@gmail.com",
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    else if (type === "DataListField") {
-        element = {
-            id:`${type}-${Date.now()}`,
-            name:`${type}-${Date.now()}`,
-            options: ["abc", "def", "xyz"],
-            label:type,
-            required: false,
-            list:`list${Date.now()}`,
-            type:type.slice(0, type.indexOf("Field")).toLowerCase(),
-        }
-    }
-    else if (type === "CheckBoxField") {
-        element = {
-            id:`${type}-${Date.now()}`,                                          
-            name:`${type}-${Date.now()}`,
-            options: ["Option-A", "Option-B", "Option-C"],
-            label:type,
-            required: false,
-            type:type.slice(0, type.indexOf("Field")).toLowerCase()
-        }
-    }
-    return element;
-  }
-
   function handleDragEnd({over}){
     const type = draggedElement.type.name;
     if (over && over.id === "canvas") {
@@ -309,13 +178,13 @@ function FormPage() {
         }
     };
 
-  const handleFormNameChange = (e) => {
-    setFormName(e.target.value);
-  }
+//   const handleFormNameChange = (e) => {
+//     setFormName(e.target.value);
+//   }
 
-  const handleTeamNameChange = (e) => {
-    setTeam(e.target.value);
-  }
+//   const handleTeamNameChange = (e) => {
+//     setTeam(e.target.value);
+//   }
 
   const publishForm =  async (e) => {
     const url = "http://127.0.0.1:3000/forms";
@@ -356,9 +225,9 @@ function FormPage() {
             <div className="w-3/4 h-full flex flex-col gap-2">
                 <Canvas canvasItems={canvasItems}/>
                 <Label>Enter form name</Label>
-                <Input onChange={handleFormNameChange} placeholder="Epic form"/>
+                <Input onChange={(e)=>setFormName(e.target.value)} placeholder="Epic form"/>
                 <Label>Enter team name</Label>
-                <Input onChange={handleTeamNameChange} placeholder="Epic team"/>
+                <Input onChange={(e)=>setTeam(e.target.value)} placeholder="Epic team"/>
                 <Button onClick={publishForm}>Publish Form</Button>
             </div>
 
