@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-
 import EditDialog from "@/components/FormPage/EditDialog";
 import {TextField,TextAreaField,TelField,SelectField,RadioField,NumberField,FileField,EmailField,DataListField,CheckBoxField } from "@/components/FormPage/ListFields";
 import {CanvasTextField,CanvasCheckBoxField,CanvasDataListField,CanvasFileField,CanvasNumberField,CanvasRadioField,CanvasSelectField,CanvasTextAreaField} from "@/components/FormPage/CanvasFields";
@@ -81,6 +80,11 @@ function Canvas(props){
         console.log(hoveredIndex)
     }
 
+    function handleDelete(){
+        props.deleteCanvasItems(hoveredIndex);
+        //console.log(props.canvasItems[hoveredIndex])
+    }
+
     const {setNodeRef} = useDroppable({
         id: 'canvas',
     });
@@ -96,7 +100,7 @@ function Canvas(props){
                                     hoveredIndex === index ? (
                                         <>
                                             <MdEdit onClick={handleEdit}/>
-                                            <FaTrash/>
+                                            <FaTrash onClick={handleDelete}/>
                                         </>
                                     ) : 
                                     null
@@ -125,119 +129,97 @@ function Canvas(props){
 }
 
 function FormPage() {
-  const [open, setOpen] = useState(false);
-  const [canvasItems, setCanvasItems] = useState([]);
-  const [draggedElement, setDraggedElement] = useState(null);
-  const [fieldInfo, setFieldInfo] = useState(null);
-  const [formName, setFormName] = useState("");
-  const [team, setTeam] = useState("");
+    const [open, setOpen] = useState(false);
+    const [canvasItems, setCanvasItems] = useState([]);
+    const [draggedElement, setDraggedElement] = useState(null);
+    const [fieldInfo, setFieldInfo] = useState(null);
+    const [formName, setFormName] = useState("");
+    const [team, setTeam] = useState("");
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  function handleDragEnd({over}){
-    const type = draggedElement.type.name;
-    if (over && over.id === "canvas") {
-        setOpen(true);
-        const elementData = setElementData(type);
-        setCanvasItems([...canvasItems, elementData]);
-        setFieldInfo(elementData);
+    function handleDragEnd({over}){
+        const type = draggedElement.type.name;
+        if (over && over.id === "canvas") {
+            setOpen(true);
+            const elementData = setElementData(type);
+            setCanvasItems([...canvasItems, elementData]);
+            setFieldInfo(elementData);
+        }
     }
-  }
 
-  const handleDragStart = (event) => {
+    const handleDragStart = (event) => {
         const type = event.active.id.split("-")[0];
-        if (type === "textfield") {
-            setDraggedElement(<TextField isDragging={true}/>);
-        }
-        else if(type === "emailfield"){
-            setDraggedElement(<EmailField isDragging={true}/>)
-        }
-        else if (type === "radiofield") {
-            setDraggedElement(<RadioField isDragging={true}/>)
-        }
-        else if (type === "textareafield") {
-            setDraggedElement(<TextAreaField isDragging={true}/>)
-        }
-        else if (type === "numberfield") {
-            setDraggedElement(<NumberField isDragging={true}/>)
-        }
-        else if (type === 'telfield') {
-            setDraggedElement(<TelField isDragging={true}/>)
-        }
-        else if (type === 'selectfield') {
-            setDraggedElement(<SelectField isDragging={true}/>)
-        }
-        else if (type === 'filefield') {
-            setDraggedElement(<FileField isDragging={true}/>)
-        }
-        else if (type === 'datalistfield') {
-            setDraggedElement(<DataListField isDragging={true}/>)
-        }
-        else if (type === 'checkboxfield') {
-            setDraggedElement(<CheckBoxField isDragging={true}/>)
-        }
+        if (type === "textfield") { setDraggedElement(<TextField isDragging={true}/>) }
+        else if(type === "emailfield") { setDraggedElement(<EmailField isDragging={true}/>) }
+        else if (type === "radiofield") { setDraggedElement(<RadioField isDragging={true}/>) }
+        else if (type === "textareafield") { setDraggedElement(<TextAreaField isDragging={true}/>) }
+        else if (type === "numberfield") { setDraggedElement(<NumberField isDragging={true}/>) }
+        else if (type === 'telfield') { setDraggedElement(<TelField isDragging={true}/>) }
+        else if (type === 'selectfield') { setDraggedElement(<SelectField isDragging={true}/>) }
+        else if (type === 'filefield') { setDraggedElement(<FileField isDragging={true}/>) }
+        else if (type === 'datalistfield') { setDraggedElement(<DataListField isDragging={true}/>) }
+        else if (type === 'checkboxfield') { setDraggedElement(<CheckBoxField isDragging={true}/>) }
     };
 
-//   const handleFormNameChange = (e) => {
-//     setFormName(e.target.value);
-//   }
-
-//   const handleTeamNameChange = (e) => {
-//     setTeam(e.target.value);
-//   }
-
-  const publishForm =  async (e) => {
-    const url = "http://127.0.0.1:3000/forms";
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            form_title: formName,
-            team: team, 
-            input_fields: canvasItems
-        })
-    })
-    if (response.ok) {
-        navigate("/home");
+    function deleteCanvasItems(index){
+        const newCanvasItems = [...canvasItems];
+        newCanvasItems.splice(index, 1);
+        setCanvasItems(newCanvasItems);
     }
-    console.log(canvasItems)
-  }
 
-  return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="flex justify-center gap-4 items-center h-screen p-4">
-            {
-                canvasItems.length > 0 ? (
-                    <EditDialog 
-                        canvasItems={canvasItems} 
-                        fieldInfo={fieldInfo} 
-                        open={open} 
-                        setOpen={setOpen} 
-                        setFieldInfo={setFieldInfo}
-                        editing={false}
-                    />
-                ) : (
-                    null
-                )
-            }
+    const publishForm =  async (e) => {
+        const url = "http://127.0.0.1:3000/forms";
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                form_title: formName,
+                team: team, 
+                input_fields: canvasItems
+            })
+        })
+        if (response.ok) {
+            navigate("/home");
+        }
+        console.log(canvasItems)
+    }
 
-            {/* Left part */}
-            <div className="w-3/4 h-full flex flex-col gap-2">
-                <Canvas canvasItems={canvasItems}/>
-                <Label>Enter form name</Label>
-                <Input onChange={(e)=>setFormName(e.target.value)} placeholder="Epic form"/>
-                <Label>Enter team name</Label>
-                <Input onChange={(e)=>setTeam(e.target.value)} placeholder="Epic team"/>
-                <Button onClick={publishForm}>Publish Form</Button>
+    return (
+        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <div className="flex justify-center gap-4 items-center h-screen p-4">
+                {
+                    canvasItems.length > 0 ? (
+                        <EditDialog 
+                            canvasItems={canvasItems} 
+                            fieldInfo={fieldInfo} 
+                            open={open} 
+                            setOpen={setOpen} 
+                            setFieldInfo={setFieldInfo}
+                            editing={false}
+                        />
+                    ) : (
+                        null
+                    )
+                }
+
+                {/* Left part */}
+                <div className="w-3/4 h-full flex flex-col gap-2">
+                    <Canvas canvasItems={canvasItems} deleteCanvasItems={deleteCanvasItems}/>
+                    <Label>Enter form name</Label>
+                    <Input onChange={(e)=>setFormName(e.target.value)} placeholder="Epic form"/>
+                    <Label>Enter team name</Label>
+                    <Input onChange={(e)=>setTeam(e.target.value)} placeholder="Epic team"/>
+                    <Button onClick={publishForm}>Publish Form</Button>
+                </div>
+
+                {/* Right part */}    
+                <div className="w-1/4 h-full">
+                    <List draggedElement={draggedElement}/>
+                </div>
             </div>
-
-            {/* Right part */}    
-            <div className="w-1/4 h-full">
-                <List draggedElement={draggedElement}/>
-            </div>
-        </div>
-    </DndContext>
-  );
+        </DndContext>
+    );
 }
 
 export default FormPage;
