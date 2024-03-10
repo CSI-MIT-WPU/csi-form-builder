@@ -57,7 +57,8 @@ export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFi
         minVal: "Minimum Value",
         maxVal: "Maxiumum Value",
         maxSize: "Maximum Size",
-        options: "Options"
+        options: "Options",
+        content: "Content"
     };
 
   return (

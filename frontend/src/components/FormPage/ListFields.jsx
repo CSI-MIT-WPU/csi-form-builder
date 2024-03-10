@@ -22,7 +22,10 @@ import { CgPlayListSearch } from "react-icons/cg";
 import { RiListRadio } from "react-icons/ri";
 import { IoIosCheckbox } from "react-icons/io";
 import { FaFile } from "react-icons/fa";
-
+import { BsTypeH1 } from "react-icons/bs";
+import { BsTypeH2 } from "react-icons/bs";
+import { ImParagraphLeft } from "react-icons/im";
+import { RiSeparator } from "react-icons/ri";
 
 
 function TextField(props) {
@@ -208,4 +211,76 @@ function CheckBoxField(props) {
   )
 }
 
-export { TextField, TextAreaField, TelField, SelectField, RadioField, NumberField, FileField, EmailField, DataListField, CheckBoxField };
+function H1Field(props){
+  const {attributes, listeners, setNodeRef} = useDraggable({
+    id: `h1field-${uuidv4()}`,
+  });
+  return (
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { cursor:'grabbing' } : {  }} className='flex justify-center w-[90%]'>
+          <Card className="w-[100%] md:w-[80%] lg:w-[60%]">
+            <CardContent className="p-2">
+              <div className="flex flex-col h-[100%] justify-center items-center">
+                <BsTypeH1 className='w-[80%] h-[40%]'/>
+                <Label className='text-center text-sm'>Header</Label>
+              </div>
+            </CardContent>
+        </Card>
+    </div>
+  )
+}
+
+function H2Field(props){
+  const {attributes, listeners, setNodeRef} = useDraggable({
+    id: `h2field-${uuidv4()}`,
+  });
+  return (
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { cursor:'grabbing' } : {  }} className='flex justify-center w-[90%]'>
+          <Card className="w-[100%] md:w-[80%] lg:w-[60%]">
+            <CardContent className="p-2">
+              <div className="flex flex-col h-[100%] justify-center items-center">
+                <BsTypeH2 className='w-[80%] h-[40%]'/>
+                <Label className='text-center text-sm'>Header</Label>
+              </div>
+            </CardContent>
+        </Card>
+    </div>
+  )
+}
+
+function ParagraphField(props){
+  const {attributes, listeners, setNodeRef} = useDraggable({
+    id: `pfield-${uuidv4()}`,
+  });
+  return (
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { cursor:'grabbing' } : {  }} className='flex justify-center w-[90%]'>
+          <Card className="w-[100%] md:w-[80%] lg:w-[60%]">
+            <CardContent className="p-2">
+              <div className="flex flex-col h-[100%] justify-center items-center">
+                <ImParagraphLeft className='w-[80%] h-[40%]'/>
+                <Label className='text-center text-sm'>Paragraph</Label>
+              </div>
+            </CardContent>
+        </Card>
+    </div>
+  )
+}
+
+function SeparatorField(props){
+  const {attributes, listeners, setNodeRef} = useDraggable({
+    id: `separatorfield-${uuidv4()}`,
+  });
+  return (
+    <div ref={setNodeRef}  {...listeners} {...attributes} style={props.isDragging ? { cursor:'grabbing' } : {  }} className='flex justify-center w-[90%]'>
+          <Card className="w-[100%] md:w-[80%] lg:w-[60%]">
+            <CardContent className="p-2">
+              <div className="flex flex-col h-[100%] justify-center items-center">
+                <RiSeparator className='w-[80%] h-[40%]'/>
+                <Label className='text-center text-sm'>Separator</Label>
+              </div>
+            </CardContent>
+        </Card>
+    </div>
+  )
+}
+
+export { TextField, TextAreaField, TelField, SelectField, RadioField, NumberField, FileField, EmailField, DataListField, CheckBoxField, H1Field, H2Field, ParagraphField, SeparatorField};

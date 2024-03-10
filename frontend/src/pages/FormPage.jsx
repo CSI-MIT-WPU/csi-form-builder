@@ -9,34 +9,55 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import EditDialog from "@/components/FormPage/EditDialog";
-import {TextField,TextAreaField,TelField,SelectField,RadioField,NumberField,FileField,EmailField,DataListField,CheckBoxField } from "@/components/FormPage/ListFields";
-import {CanvasTextField,CanvasCheckBoxField,CanvasDataListField,CanvasFileField,CanvasNumberField,CanvasRadioField,CanvasSelectField,CanvasTextAreaField} from "@/components/FormPage/CanvasFields";
+import {TextField,TextAreaField,TelField,SelectField,RadioField,NumberField,FileField,EmailField,DataListField,CheckBoxField, H1Field, H2Field, ParagraphField, SeparatorField } from "@/components/FormPage/ListFields";
+import {CanvasTextField,CanvasCheckBoxField,CanvasDataListField,CanvasFileField,CanvasNumberField,CanvasRadioField,CanvasSelectField,CanvasTextAreaField, CanvasH1Field, CanvasH2Field, CanvasParagraphField, CanvasSeparatorField} from "@/components/FormPage/CanvasFields";
 
 import { MdEdit } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
 
 import { setElementData } from "@/utilityFunctions";
+
 function List(props) {
     return (
         <div className="flex flex-col h-full">
-            <div className="font-light text-3xl text-center mb-6">Input Fields</div>
-            <div className="md:grid md:grid-cols-2 grid-rows-5 justify-items-center gap-y-4">
-                <TextField />
-                <EmailField />
-                <NumberField />
-                <TelField />
-                <TextAreaField />
-                <SelectField />
-                <DataListField />
-                <RadioField />
-                <CheckBoxField />
-                <FileField />
-                <DragOverlay>
-                    {props.draggedElement}
-                </DragOverlay>
-            </div>
+            <div className="font-light text-3xl text-center mb-6">Draggable Fields</div>
+            <Tabs defaultValue="Input" className="w-[100%]">
+                <TabsList className="w-[100%]">
+                    <TabsTrigger value="Input">Input</TabsTrigger>
+                    <TabsTrigger value="Decoration">Decoration</TabsTrigger>
+                </TabsList>
+                <TabsContent value="Input">
+                    <div className="md:grid md:grid-cols-2 grid-rows-5 justify-items-center gap-y-4">
+                        <TextField />
+                        <EmailField />
+                        <NumberField />
+                        <TelField />
+                        <TextAreaField />
+                        <SelectField />
+                        <DataListField />
+                        <RadioField />
+                        <CheckBoxField />
+                        <FileField />
+                        <DragOverlay>
+                            {props.draggedElement}
+                        </DragOverlay>
+                    </div>
+                </TabsContent>
+                <TabsContent value="Decoration">
+                <div className="md:grid md:grid-cols-2 grid-rows-5 justify-items-center gap-y-4">
+                    <H1Field/>
+                    <H2Field/>
+                    <ParagraphField/>
+                    <SeparatorField/>
+                    <DragOverlay>
+                            {props.draggedElement}
+                    </DragOverlay>
+                </div>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
@@ -48,6 +69,7 @@ function Canvas(props){
     const [fieldInfo, setFieldInfo] = useState(null);
 
     function renderElement(element){
+        console.log(element.type)
         if (element.type === "text" || element.type === "tel" || element.type === "email") {
             return <CanvasTextField element={element}/>
         }
@@ -72,6 +94,19 @@ function Canvas(props){
         else if (element.type === "checkbox") {
             return <CanvasCheckBoxField element={element}/>
         }
+        else if (element.type === "h1") {
+            return <CanvasH1Field element={element}/>
+        }
+        else if (element.type === "h2") {
+            return <CanvasH2Field element={element}/>
+        }
+        else if (element.type === "paragraph") {
+            return <CanvasParagraphField element={element}/>
+        }
+        else if (element.type === "separator") {
+            console.log("asd")
+            return <CanvasSeparatorField element={element}/>
+        }
     }
 
     function handleEdit(){
@@ -82,7 +117,6 @@ function Canvas(props){
 
     function handleDelete(){
         props.deleteCanvasItems(hoveredIndex);
-        //console.log(props.canvasItems[hoveredIndex])
     }
 
     const {setNodeRef} = useDroppable({
@@ -140,6 +174,7 @@ function FormPage() {
 
     function handleDragEnd({over}){
         const type = draggedElement.type.name;
+        console.log(type)
         if (over && over.id === "canvas") {
             setOpen(true);
             const elementData = setElementData(type);
@@ -150,6 +185,7 @@ function FormPage() {
 
     const handleDragStart = (event) => {
         const type = event.active.id.split("-")[0];
+        console.log(type)
         if (type === "textfield") { setDraggedElement(<TextField isDragging={true}/>) }
         else if(type === "emailfield") { setDraggedElement(<EmailField isDragging={true}/>) }
         else if (type === "radiofield") { setDraggedElement(<RadioField isDragging={true}/>) }
@@ -160,6 +196,10 @@ function FormPage() {
         else if (type === 'filefield') { setDraggedElement(<FileField isDragging={true}/>) }
         else if (type === 'datalistfield') { setDraggedElement(<DataListField isDragging={true}/>) }
         else if (type === 'checkboxfield') { setDraggedElement(<CheckBoxField isDragging={true}/>) }
+        else if (type === 'h1field') { setDraggedElement(<H1Field isDragging={true}/>) }
+        else if (type === 'h2field') { setDraggedElement(<H2Field isDragging={true}/>) }
+        else if (type === 'pfield') { setDraggedElement(<ParagraphField isDragging={true}/>) }
+        else if (type === 'separatorfield') { setDraggedElement(<SeparatorField isDragging={true}/>) }
     };
 
     function deleteCanvasItems(index){
@@ -169,19 +209,19 @@ function FormPage() {
     }
 
     const publishForm =  async (e) => {
-        const url = "http://127.0.0.1:3000/forms";
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                form_title: formName,
-                team: team, 
-                input_fields: canvasItems
-            })
-        })
-        if (response.ok) {
-            navigate("/home");
-        }
+        // const url = "http://127.0.0.1:3000/forms";
+        // const response = await fetch(url, {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({
+        //         form_title: formName,
+        //         team: team, 
+        //         input_fields: canvasItems
+        //     })
+        // })
+        // if (response.ok) {
+        //     navigate("/home");
+        // }
         console.log(canvasItems)
     }
 

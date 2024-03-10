@@ -107,6 +107,37 @@ function setElementData(type){
             type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
     }
+    else if (type === "H1Field"){
+        element = {
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            content: "Temporary Header",
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
+        }
+    }
+    else if (type === "H2Field"){
+        element = {
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            content: "Temporary Header",
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
+        }
+    }
+    else if (type === "ParagraphField"){
+        element = {
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            content: "Temporary Paragraph Text",
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
+        }
+    }
+    else if (type === "SeparatorField"){
+        element = {
+            id:`${type}-${Date.now()}`,                                          
+            name:`${type}-${Date.now()}`,
+            type:type.slice(0, type.indexOf("Field")).toLowerCase()
+        }
+    }
     return element;
 }
 

@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -154,4 +155,50 @@ function CanvasCheckBoxField({element}) {
     )
 }
 
-export { CanvasTextField, CanvasTextAreaField, CanvasSelectField, CanvasRadioField, CanvasNumberField, CanvasFileField, CanvasDataListField, CanvasCheckBoxField };
+function CanvasH1Field({element}) {
+    return (
+        <>
+            {
+                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    {element.content}
+                </h1>
+            }
+        </>
+    )
+}
+
+function CanvasH2Field({element}) {
+    return (
+        <>
+            {
+                <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                    {element.content}
+                </h2>
+            }
+        </>
+    )
+}
+
+function CanvasParagraphField({element}) {
+    return (
+        <>
+            {
+                <p className="leading-7">
+                    {element.content}
+                </p>
+            }
+        </>
+    )
+}
+
+function CanvasSeparatorField({element}) {
+    return (
+        <>
+            {
+                <Separator name={element.name}/>
+            }
+        </>
+    )
+}
+
+export { CanvasTextField, CanvasTextAreaField, CanvasSelectField, CanvasRadioField, CanvasNumberField, CanvasFileField, CanvasDataListField, CanvasCheckBoxField, CanvasH1Field, CanvasH2Field, CanvasParagraphField, CanvasSeparatorField };
