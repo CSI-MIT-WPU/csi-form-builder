@@ -1,29 +1,64 @@
-/* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import CreateFormBtn from "@/components/HomePage/CreateFormBtn";
-import PublishedFormsBtn from "@/components/HomePage/PublishedFormsBtn";
-import Toolbar from "@/components/HomePage/Toolbar";
-import StatsCard from "@/components/common/StatsCard";
+/* eslint-disable no-unused-vars */
+import React, { ReactNode, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+export function StatsCard({
+  title,
+  value,
+  icon,
+  helperText,
+  loading,
+  className,
+}) {
+  return (
+    <Card className={className}>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {title}
+        </CardTitle>
+        {icon}
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">
+          {loading && (
+            <Skeleton>
+              <span className="opacity-0">0</span>
+            </Skeleton>
+          )}
+          {!loading && value}
+        </div>
+        <p className="pt-1 text-xs text-muted-foreground">{helperText}</p>
+      </CardContent>
+    </Card>
+  );
+}
 
 const HomePage = () => {
-
   const fetchData = async () => {
     const url = "http://127.0.0.1:3000/forms/all";
     try {
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("An error occured");
-      } 
+      }
       const data = await response.json();
       setPublishedForms(data.forms);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   const [search, setSearch] = useState("");
   const [publishedForms, setPublishedForms] = useState([]);
@@ -66,6 +101,13 @@ const HomePage = () => {
       timestamp: new Date(),
     },
   ]);
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function getUser() {}
+    getUser();
+  }, []);
 
   return (
     <>
@@ -99,17 +141,15 @@ const HomePage = () => {
               ? form
               : form.title.toLowerCase().includes(search);
           })
-           .map((form) => (            
-              <PublishedFormsBtn
-                key={form.form_id}
-                id={form.form_id}
-                title={form.form_title}
-                description={`${form.team} department`}
-                timestamp={new Date(form.createdAt)}
-              />
-            )
-          )
-        }
+          .map((form) => (
+            <PublishedFormsBtn
+              key={form.form_id}
+              id={form.form_id}
+              title={form.form_title}
+              description={`${form.team} department`}
+              timestamp={new Date(form.createdAt)}
+            />
+          ))}
       </div>
     </>
   );
