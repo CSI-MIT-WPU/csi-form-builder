@@ -9,7 +9,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 import EditDialog from "@/components/FormPage/EditDialog";
 import {
@@ -94,7 +96,6 @@ function Canvas(props) {
   const [fieldInfo, setFieldInfo] = useState(null);
 
   function renderElement(element) {
-    console.log(element.type);
     if (
       element.type === "text" ||
       element.type === "tel" ||
@@ -129,7 +130,6 @@ function Canvas(props) {
   function handleEdit() {
     setFieldInfo(props.canvasItems[hoveredIndex]);
     setOpen(true);
-    console.log(hoveredIndex);
   }
 
   function handleDelete() {
@@ -192,7 +192,6 @@ function FormPage() {
 
   function handleDragEnd({ over }) {
     const type = draggedElement.type.name;
-    console.log(type);
     if (over && over.id === "canvas") {
       setOpen(true);
       const elementData = setElementData(type);
@@ -203,7 +202,6 @@ function FormPage() {
 
   const handleDragStart = (event) => {
     const type = event.active.id.split("-")[0];
-    console.log(type);
     if (type === "textfield") {
       setDraggedElement(<TextField isDragging={true} />);
     } else if (type === "emailfield") {
@@ -242,20 +240,27 @@ function FormPage() {
   }
 
   const publishForm = async (e) => {
-    // const url = "http://127.0.0.1:3000/forms";
-    // const response = await fetch(url, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //         form_title: formName,
-    //         team: team,
-    //         input_fields: canvasItems
-    //     })
-    // })
-    // if (response.ok) {
-    //     navigate("/home");
-    // }
-    console.log(canvasItems);
+    const url = "http://127.0.0.1:3000/forms";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form_title: formName,
+          team: team,
+          input_fields: canvasItems
+        })
+      });
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        throw new Error(errorData.message); 
+      }
+      navigate("/home");
+    } catch (error) {
+        toast("There was an error!", {
+          description: `${error.message}`,
+        })
+    }
   };
 
   return (

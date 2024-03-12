@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import FormPage from "./pages/FormPage";
 import Navbar from "./components/common/Navbar";
 import FormRes from "./pages/FormRes";
+import { Toaster } from "@/components/ui/sonner"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/form-res/:id" element={<FormRes />} />
         </Routes>
+        <Toaster/>
       </div>
     </Router>
   );
