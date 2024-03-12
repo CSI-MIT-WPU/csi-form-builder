@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Response = require('../models/Response');
-const validateResponse = require('../middleware/formValidation');
+const validateResponse = require('../middleware/responseValidation');
 
 //GET ALL RESPONSES FOR ALL FORMS
 router.get("/all", async(req, res)=>{

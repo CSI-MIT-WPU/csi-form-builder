@@ -1,104 +1,55 @@
-const CheckboxField = require("../components/Input/CheckboxField");
-const DatalistField = require("../components/Input/DatalistField");
-const EmailField = require("../components/Input/EmailField");
-const FileField = require("../components/Input/FileField");
-const NumberField = require("../components/Input/NumberField");
-const RadioField = require("../components/Input/RadioField");
-const SelectField = require("../components/Input/SelectField");
-const TelephoneField = require("../components/Input/TelephoneField");
-const TextareaField = require("../components/Input/TextareaField");
-const TextField = require("../components/Input/Textfield");
-const Form = require("../models/Form");
+const validateForm = (req, res, next) => {
 
-const validateResponse = async (req, res, next) => {
-    try {
-        const fields = req.body.content;
-        const form_id = req.body.form_id;
-        const form = await Form.find({"form_id":form_id});
-        if (!form[0]) {
-            return res.status(404).json({message:"Form id invalid. Form not found."})
+    const possibleFields = {
+        "text": true,
+        "textarea": true,
+        "tel": true,
+        "select": true,
+        "radio": true,
+        "number": true,
+        "file": true,
+        "email": true,
+        "datalist": true,
+        "checkbox": true,
+        "h1": true,
+        "h2": true,
+        "paragraph": true,
+        "separator": true
+    }
+
+    const {form_title, team, input_fields} = req.body;
+
+    //handles empty form title 
+    if (form_title.length <= 0) { 
+        return res.status(400).json({message: "Bad request"});
+    }
+
+    //handles empty team name 
+    if (team.length <= 0) { 
+        return res.status(400).json({message: "Bad request"});
+    }
+
+    for (let i = 0; i < input_fields.length; i++) {
+        const field = input_fields[i];
+        if (!(field.type in possibleFields)) {
+            return res.status(400).json({message: `Bad request (field type issue) `}); 
         }
-        const inputFields = form[0].input_fields;
-        if (inputFields.length != fields.length) {
-            return res.status(400).json({message: `Improper input format`});
-        }
-        for (let i = 0; i < fields.length; i++) {
-            let field = fields[i];
-            if (field.type === "textfield") {
-                const value = field[inputFields[i].name];            // value is the actual response value of a specific form field for a given form.
-                const isValid = TextField.checkValidity(value, inputFields[i].minLen, inputFields[i].maxLen, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
+        for (const attr in field) {
+            //handles empty form field
+            if (!field[attr]) {
+                return res.status(400).json({message: `${attr} not provided`});            
             }
-            else if (field.type === "textarea") {
-                const value = field[inputFields[i].name];
-                const isValid = TextareaField.checkValidity(value, inputFields[i].minLen, inputFields[i].maxLen, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
+            //checks if the type of minimum length/maximum length is integer or not
+            if ((attr === "minLen" || attr === "maxLen" || attr === "minVal" || attr === "maxVal") && typeof field[attr] !== "number") {
+                return res.status(400).json({message: `Bad request`}); 
             }
-            else if (field.type === "telephone") {
-                const value = field[inputFields[i].name];
-                const isValid = TelephoneField.checkValidity(value, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "select") {
-                const value = field[inputFields[i].name];
-                const isValid = SelectField.checkValidity(value, inputFields[i].options, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "radio") {
-                const value = field[inputFields[i].name];
-                const isValid = RadioField.checkValidity(value, inputFields[i].options, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "number") {
-                const value = field[inputFields[i].name];
-                const isValid = NumberField.checkValidity(value, inputFields[i].minVal, inputFields[i].maxVal, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "file") {
-                const value = field[inputFields[i].name];
-                const isValid = FileField.checkValidity(value, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "email") {
-                const value = field[inputFields[i].name];
-                const isValid = EmailField.checkValidity(value, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "datalist") {
-                const value = field[inputFields[i].name];
-                const isValid = DatalistField.checkValidity(value, inputFields[i].options, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
-            }
-            else if (field.type === "checkbox") {
-                const value = field[inputFields[i].name];
-                const isValid = CheckboxField.checkValidity(value, inputFields[i].options, inputFields[i].required);
-                if (!isValid) {
-                    return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
-                }
+            //checks if required field is boolean or not 
+            if (attr === "required" && typeof field[attr] !== "boolean") {
+                return res.status(400).json({message: `The 'Required' field must be true or false only.`}); 
             }
         }
-    } catch (error) {
-        return res.status(500).json({error:"Internal server error!"})
     }
     next();
 }
 
-module.exports = validateResponse;
+module.exports = validateForm;

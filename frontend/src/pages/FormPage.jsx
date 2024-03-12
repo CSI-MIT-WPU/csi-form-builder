@@ -122,7 +122,6 @@ function Canvas(props) {
     } else if (element.type === "paragraph") {
       return <CanvasParagraphField element={element} />;
     } else if (element.type === "separator") {
-      console.log("asd");
       return <CanvasSeparatorField element={element} />;
     }
   }

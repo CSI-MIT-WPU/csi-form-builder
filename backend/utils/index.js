@@ -8,6 +8,10 @@ const FileField = require('../components/Input/FileField');
 const EmailField = require('../components/Input/EmailField');
 const DatalistField = require('../components/Input/DatalistField');
 const CheckboxField = require('../components/Input/CheckboxField');
+const H1Field = require('../components/Decoration/H1Field');
+const ParagraphField = require('../components/Decoration/ParagraphField');
+const H2Field = require('../components/Decoration/H2Field');
+const SeparatorField = require('../components/Decoration/SeparatorField');
 
 function generateFields(fields) {
     let content = [];
@@ -41,6 +45,18 @@ function generateFields(fields) {
         }
         else if (field.type == "checkbox") {
             content.push(new CheckboxField(field.name,field.options, field.label, field.required));
+        }
+        else if(field.type == "h1"){
+            content.push(new H1Field(field.name, field.content));
+        }
+        else if(field.type == "h2"){
+            content.push(new H2Field(field.name, field.content));
+        }
+        else if(field.type == "paragraph"){
+            content.push(new ParagraphField(field.name, field.content));
+        }
+        else if(field.type == "separator"){
+            content.push(new SeparatorField(field.name));
         }
     });
     return content;

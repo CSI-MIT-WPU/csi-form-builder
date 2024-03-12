@@ -4,6 +4,7 @@ const router = express.Router();
 const Form = require('../models/Form');
 const Response = require("../models/Response");
 const generateFields = require('../utils/index');
+const validateForm = require('../middleware/formValidation');
 
 //GET ALL FORMS
 router.get("/all", async (req, res) => {
@@ -16,7 +17,7 @@ router.get("/all", async (req, res) => {
 })
 
 //POSTS FORM 
-router.post("/", async(req, res) => {
+router.post("/", validateForm, async(req, res) => {
     try {
         const {form_title, team, input_fields} = req.body;
         let content = generateFields(input_fields);
