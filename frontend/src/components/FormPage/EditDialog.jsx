@@ -14,38 +14,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 
-export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFieldInfo, editing, hoveredIndex}) {
-
-    const [index, setIndex] = useState(null);
-
-    useEffect(()=>{
-        setIndex(hoveredIndex);
-        console.log(hoveredIndex)
-    }, [])
-
-    const handleFieldUpdate = (e) => {
-        e.preventDefault();
-        if (editing) {
-            const items = canvasItems;
-            items[index] = fieldInfo;
-        }
-        else{
-            const items = canvasItems;
-            items[items.length-1] = fieldInfo;
-        }
-        setOpen(false);
-        
-    }
-
-    const handleFieldChange = (e) => {
-        const field = e.target.id;
-        let value = e.target.value;
-        if (field === "options") {
-            let val = e.target.value.split(",");
-            value = val;
-        }
-        setFieldInfo({...fieldInfo, [field]:value});
-    }
+export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFieldInfo, editing, hoveredIndex, setCanvasItems}) {
 
     const fieldAttributeMap = {
         name: "Name",
@@ -60,6 +29,51 @@ export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFi
         options: "Options",
         content: "Content"
     };
+
+    const [index, setIndex] = useState(null);
+
+    useEffect(()=>{
+        setIndex(hoveredIndex);
+    }, [])
+
+    const handleFieldUpdate = (e) => {
+        e.preventDefault();
+        let items = [...canvasItems];
+        if (editing) {
+            items[index] = fieldInfo;
+        }
+        else{
+            items[items.length-1] = fieldInfo;
+        }
+        items = validateDatatypes(items);
+        setCanvasItems(items);
+        setOpen(false);
+    }
+
+    const handleFieldChange = (e) => {
+        const field = e.target.id;
+        let value = e.target.value;
+        if (field === "options") {
+            let val = e.target.value.split(",");
+            value = val;
+        }
+        setFieldInfo({...fieldInfo, [field]:value});
+    }
+
+    const validateDatatypes = (items) => {
+        for (let i = 0; i < items.length; i++) {
+            const field = items[i];
+            for (const propName of ['maxLen', 'minLen', 'maxVal', 'minVal']) {
+                if (field[propName] && typeof field[propName] !== 'number') {
+                    field[propName] = Number(field[propName]);
+                }
+            }
+            console.log(field.required);
+            field.required = field.required === "true";
+        }
+        return items;
+    }
+
 
   return (
             <Dialog open={open} onOpenChange={setOpen}>

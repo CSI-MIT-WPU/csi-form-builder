@@ -167,6 +167,7 @@ function Canvas(props) {
       {open ? (
         <EditDialog
           canvasItems={props.canvasItems}
+          setCanvasItems={props.setCanvasItems}
           fieldInfo={fieldInfo}
           open={open}
           setOpen={setOpen}
@@ -263,6 +264,7 @@ function FormPage() {
         {canvasItems.length > 0 ? (
           <EditDialog
             canvasItems={canvasItems}
+            setCanvasItems={setCanvasItems}
             fieldInfo={fieldInfo}
             open={open}
             setOpen={setOpen}
@@ -275,6 +277,7 @@ function FormPage() {
         <div className="flex h-full w-3/4 flex-col gap-2">
           <Canvas
             canvasItems={canvasItems}
+            setCanvasItems={setCanvasItems}
             deleteCanvasItems={deleteCanvasItems}
           />
           <Label>Enter form name</Label>
