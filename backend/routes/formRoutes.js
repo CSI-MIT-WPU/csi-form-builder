@@ -4,6 +4,7 @@ const router = express.Router();
 const Form = require('../models/Form');
 const Response = require("../models/Response");
 const generateFields = require('../utils/index');
+const validateForm = require('../middleware/formValidation');
 
 //GET ALL FORMS
 router.get("/all", async (req, res) => {
@@ -16,11 +17,11 @@ router.get("/all", async (req, res) => {
 })
 
 //POSTS FORM 
-router.post("/", async(req, res) => {
+router.post("/", validateForm, async(req, res) => {
     try {
-        const {form_title, team, input_fields} = req.body;
+        const {form_title, team, status, input_fields} = req.body;
         let content = generateFields(input_fields);
-        const newForm = await Form.create({form_title:form_title, team:team, input_fields:content});
+        const newForm = await Form.create({form_title:form_title, team:team, status:status, input_fields:content});
         res.status(200).json({message:newForm});
     } catch (error) {
         res.status(500).json({error:"An error occured"});

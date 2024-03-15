@@ -9,7 +9,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 import EditDialog from "@/components/FormPage/EditDialog";
 import {
@@ -94,7 +96,6 @@ function Canvas(props) {
   const [fieldInfo, setFieldInfo] = useState(null);
 
   function renderElement(element) {
-    console.log(element.type);
     if (
       element.type === "text" ||
       element.type === "tel" ||
@@ -122,7 +123,6 @@ function Canvas(props) {
     } else if (element.type === "paragraph") {
       return <CanvasParagraphField element={element} />;
     } else if (element.type === "separator") {
-      console.log("asd");
       return <CanvasSeparatorField element={element} />;
     }
   }
@@ -130,7 +130,6 @@ function Canvas(props) {
   function handleEdit() {
     setFieldInfo(props.canvasItems[hoveredIndex]);
     setOpen(true);
-    console.log(hoveredIndex);
   }
 
   function handleDelete() {
@@ -168,6 +167,7 @@ function Canvas(props) {
       {open ? (
         <EditDialog
           canvasItems={props.canvasItems}
+          setCanvasItems={props.setCanvasItems}
           fieldInfo={fieldInfo}
           open={open}
           setOpen={setOpen}
@@ -192,7 +192,6 @@ function FormPage() {
 
   function handleDragEnd({ over }) {
     const type = draggedElement.type.name;
-    console.log(type);
     if (over && over.id === "canvas") {
       setOpen(true);
       const elementData = setElementData(type);
@@ -203,7 +202,6 @@ function FormPage() {
 
   const handleDragStart = (event) => {
     const type = event.active.id.split("-")[0];
-    console.log(type);
     if (type === "textfield") {
       setDraggedElement(<TextField isDragging={true} />);
     } else if (type === "emailfield") {
@@ -241,22 +239,38 @@ function FormPage() {
     setCanvasItems(newCanvasItems);
   }
 
-  const publishForm = async (e) => {
-    // const url = "http://127.0.0.1:3000/forms";
-    // const response = await fetch(url, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //         form_title: formName,
-    //         team: team,
-    //         input_fields: canvasItems
-    //     })
-    // })
-    // if (response.ok) {
-    //     navigate("/home");
-    // }
-    console.log(canvasItems);
+  const postForm = async(formStatus) => {
+    const url = "http://127.0.0.1:3000/forms";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form_title: formName,
+          team: team,
+          status: formStatus,
+          input_fields: canvasItems
+        })
+      });
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        throw new Error(errorData.message); 
+      }
+      navigate("/home");
+    } catch (error) {
+        toast("There was an error!", {
+          description: `${error.message}`,
+        })
+    }
+  }
+
+  const publishForm = (e) => {
+    postForm("publish");
   };
+
+  const draftForm = (e) => {
+    postForm("draft");
+  }
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -264,6 +278,7 @@ function FormPage() {
         {canvasItems.length > 0 ? (
           <EditDialog
             canvasItems={canvasItems}
+            setCanvasItems={setCanvasItems}
             fieldInfo={fieldInfo}
             open={open}
             setOpen={setOpen}
@@ -273,22 +288,36 @@ function FormPage() {
         ) : null}
 
         {/* Left part */}
-        <div className="flex h-full w-3/4 flex-col gap-2">
+        <div className="h-full w-3/4 gap-2">
+          <div className="flex items-center w-full pb-2">
+            <div className="flex gap-2 w-[100%]">
+              <div className="w-[40%]">
+                <Label>Enter form name</Label>
+                <Input
+                  onChange={(e) => setFormName(e.target.value)}
+                  placeholder="Epic form"
+                  className="border-gray-300"
+                />
+              </div>
+              <div className="w-[40%]">
+                <Label>Enter team name</Label>
+                <Input
+                  onChange={(e) => setTeam(e.target.value)}
+                  placeholder="Epic team"
+                  className="border-gray-300"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 self-end">
+              <Button onClick={publishForm} className="rounded-3xl">Publish</Button>
+              <Button onClick={draftForm} className="rounded-3xl" >Draft</Button>
+            </div>
+          </div>
           <Canvas
             canvasItems={canvasItems}
+            setCanvasItems={setCanvasItems}
             deleteCanvasItems={deleteCanvasItems}
           />
-          <Label>Enter form name</Label>
-          <Input
-            onChange={(e) => setFormName(e.target.value)}
-            placeholder="Epic form"
-          />
-          <Label>Enter team name</Label>
-          <Input
-            onChange={(e) => setTeam(e.target.value)}
-            placeholder="Epic team"
-          />
-          <Button onClick={publishForm}>Publish Form</Button>
         </div>
 
         {/* Right part */}

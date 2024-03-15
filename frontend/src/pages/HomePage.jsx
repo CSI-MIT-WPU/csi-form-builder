@@ -153,6 +153,7 @@ const HomePage = () => {
               title={form.form_title}
               description={`${form.team} department`}
               timestamp={new Date(form.createdAt)}
+              status={form.status}
             />
           ))}
       </div>

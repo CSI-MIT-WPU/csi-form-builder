@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Response = require('../models/Response');
-const validateResponse = require('../middleware/formValidation');
+const validateResponse = require('../middleware/responseValidation');
 
 //GET ALL RESPONSES FOR ALL FORMS
 router.get("/all", async(req, res)=>{
@@ -29,6 +29,9 @@ router.get("/:form_id", async (req, res) => {
 router.post("/submit", validateResponse, async(req, res) => {
     try {
         const {user_email, form_id, content} = req.body;
+        if (!form_id) {
+            return res.status(404).json({message:"form not found"});
+        }
         const newResponse = await Response.create({
             user_email: user_email,
             form_id: form_id,
