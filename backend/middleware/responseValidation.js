@@ -18,13 +18,16 @@ const validateResponse = async (req, res, next) => {
         if (!form[0]) {
             return res.status(404).json({message:"Form id invalid. Form not found."})
         }
-        const inputFields = form[0].input_fields;
-        if (inputFields.length != fields.length) {
-            return res.status(400).json({message: `Improper input format`});
+        if (form[0].status !== "published") {
+            return res.status(200).json({message:"Form is not accepting responses."});
         }
+        const inputFields = form[0].input_fields;
+        // if (inputFields.length != fields.length) {
+        //     return res.status(400).json({message: `Improper input formatdad`});
+        // }
         for (let i = 0; i < fields.length; i++) {
-            console.log("hi");
             let field = fields[i];
+
             if (field.type === "textfield") {
                 const value = field[inputFields[i].name];            // value is the actual response value of a specific form field for a given form.
                 const isValid = TextField.checkValidity(value, inputFields[i].minLen, inputFields[i].maxLen, inputFields[i].required);
