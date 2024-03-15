@@ -15,6 +15,12 @@ const formSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        required: true,
+        default: "draft",
+        enum: ["closed", "draft", "published"]
+    },
     input_fields:{
         type: mongoose.Schema.Types.Mixed
     }

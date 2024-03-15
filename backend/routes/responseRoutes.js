@@ -29,6 +29,9 @@ router.get("/:form_id", async (req, res) => {
 router.post("/submit", validateResponse, async(req, res) => {
     try {
         const {user_email, form_id, content} = req.body;
+        if (!form_id) {
+            return res.status(404).json({message:"form not found"});
+        }
         const newResponse = await Response.create({
             user_email: user_email,
             form_id: form_id,

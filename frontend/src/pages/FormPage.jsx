@@ -239,7 +239,7 @@ function FormPage() {
     setCanvasItems(newCanvasItems);
   }
 
-  const publishForm = async (e) => {
+  const postForm = async(formStatus) => {
     const url = "http://127.0.0.1:3000/forms";
     try {
       const response = await fetch(url, {
@@ -248,6 +248,7 @@ function FormPage() {
         body: JSON.stringify({
           form_title: formName,
           team: team,
+          status: formStatus,
           input_fields: canvasItems
         })
       });
@@ -261,7 +262,15 @@ function FormPage() {
           description: `${error.message}`,
         })
     }
+  }
+
+  const publishForm = (e) => {
+    postForm("publish");
   };
+
+  const draftForm = (e) => {
+    postForm("draft");
+  }
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -279,23 +288,36 @@ function FormPage() {
         ) : null}
 
         {/* Left part */}
-        <div className="flex h-full w-3/4 flex-col gap-2">
+        <div className="h-full w-3/4 gap-2">
+          <div className="flex items-center w-full pb-2">
+            <div className="flex gap-2 w-[100%]">
+              <div className="w-[40%]">
+                <Label>Enter form name</Label>
+                <Input
+                  onChange={(e) => setFormName(e.target.value)}
+                  placeholder="Epic form"
+                  className="border-gray-300"
+                />
+              </div>
+              <div className="w-[40%]">
+                <Label>Enter team name</Label>
+                <Input
+                  onChange={(e) => setTeam(e.target.value)}
+                  placeholder="Epic team"
+                  className="border-gray-300"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 self-end">
+              <Button onClick={publishForm} className="rounded-3xl">Publish</Button>
+              <Button onClick={draftForm} className="rounded-3xl" >Draft</Button>
+            </div>
+          </div>
           <Canvas
             canvasItems={canvasItems}
             setCanvasItems={setCanvasItems}
             deleteCanvasItems={deleteCanvasItems}
           />
-          <Label>Enter form name</Label>
-          <Input
-            onChange={(e) => setFormName(e.target.value)}
-            placeholder="Epic form"
-          />
-          <Label>Enter team name</Label>
-          <Input
-            onChange={(e) => setTeam(e.target.value)}
-            placeholder="Epic team"
-          />
-          <Button onClick={publishForm}>Publish Form</Button>
         </div>
 
         {/* Right part */}

@@ -10,14 +10,14 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { useNavigate } from "react-router-dom";
 
-function PublishedFormsBtn({ id, title, description, timestamp }) {
+function PublishedFormsBtn({ id, title, description, timestamp, status }) {
   const navigate = useNavigate();
   return (
     <Card className="h-fit w-full">
       <CardHeader>
         <div className="flex justify-between">
           <CardTitle>{title}</CardTitle>
-          <Badge>Published</Badge>
+          <Badge>{status}</Badge>
         </div>
         <CardDescription>{timestamp.toLocaleString()}</CardDescription>
         <br />
