@@ -16,6 +16,22 @@ router.get("/all", async (req, res) => {
     }
 })
 
+//GETS FORM FIELDS FOR A SPECIFIC FORM
+router.get("/:form_id", async(req, res) => {
+    try {
+        const form = await Form.findOne({form_id:req.params.form_id});
+        if (!form) {
+            return res.status(404).json({message:"Form not found!"});
+        }
+        if (form.status !== "published") {
+            return res.status(200).json({message:"Form is not accepting responses!"});
+        }
+        res.status(200).json({form:form});
+    } catch (error) {
+        res.status(200).json({message:error});
+    }
+})
+
 //POSTS FORM 
 router.post("/", validateForm, async(req, res) => {
     try {

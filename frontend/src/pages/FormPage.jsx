@@ -265,7 +265,7 @@ function FormPage() {
   }
 
   const publishForm = (e) => {
-    postForm("publish");
+    postForm("published");
   };
 
   const draftForm = (e) => {
