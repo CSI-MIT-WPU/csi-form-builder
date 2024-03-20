@@ -1,28 +1,25 @@
+/* eslint-disable no-unused-vars */
 import { Card } from '@/components/ui/card';
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import {
-    CanvasTextField,
-    CanvasCheckBoxField,
-    CanvasDataListField,
-    CanvasFileField,
-    CanvasNumberField,
-    CanvasRadioField,
-    CanvasSelectField,
-    CanvasTextAreaField,
-    CanvasH1Field,
-    CanvasH2Field,
-    CanvasParagraphField,
-    CanvasSeparatorField,
-} from "@/components/FormPage/CanvasFields";
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form"
+import { useForm } from 'react-hook-form';
+import { CheckBoxField, DataListField, RadioField, SelectField, SimpleInput, TextArea } from '@/components/ResponsePage/FormFields';
 
 export default function ResponsePage() {
 
     const [formName, setFormName] = useState("Test form");
     const [inputFields, setInputFields] = useState([]);
     const { id } = useParams();
+    const form = useForm();
 
     useEffect(()=>{
         const getData = async () => {
@@ -37,62 +34,57 @@ export default function ResponsePage() {
         getData();
     }, []);
 
-    function renderElement(element) {
-        console.log(element.id)
-        if (
-          element.type === "textfield" ||
-          element.type === "tel" ||
-          element.type === "email"
-        ) {
-          return <CanvasTextField element={element} />;
-        } else if (element.type === "textarea") {
-          return <CanvasTextAreaField element={element} />;
-        } else if (element.type === "select") {
-          return <CanvasSelectField element={element} />;
-        } else if (element.type === "radio") {
-          return <CanvasRadioField element={element} />;
-        } else if (element.type === "number") {
-          return <CanvasNumberField element={element} />;
-        } else if (element.type === "file") {
-          return <CanvasFileField element={element} />;
-        } else if (element.type === "datalist") {
-          return <CanvasDataListField element={element} />;
-        } else if (element.type === "checkbox") {
-          return <CanvasCheckBoxField element={element} />;
-        } else if (element.type === "h1") {
-          return <CanvasH1Field element={element} />;
-        } else if (element.type === "h2") {
-          return <CanvasH2Field element={element} />;
-        } else if (element.type === "paragraph") {
-          return <CanvasParagraphField element={element} />;
-        } else if (element.type === "separator") {
-          return <CanvasSeparatorField element={element} />;
-        }
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(e.target);
+    }
+
+    const renderFormField = (type, field, form) => {
+      if (type === "textfield" || type === "email" || type === "telephone" || type === "number" || type === "file") {
+        return <SimpleInput field={field}/>
+      }
+      else if (type === "textarea") {
+        return <TextArea field={field}/>
+      }
+      else if (type === "select") {
+        return <SelectField field={field}/>
+      }
+      else if (type === "datalist") {
+        return <DataListField field={field} form={form}/>
+      }
+      else if (type === "radio") {
+        return <RadioField field={field}/>
+      }
+      else if (type === "checkbox") {
+        return <CheckBoxField field={field} form={form}/>
+      }
     }
 
     return (
     <div className='w-full p-4'>
         <h2 className="scroll-m-20 border-b p-6 text-3xl font-semibold tracking-tight first:mt-0 text-center">{formName}</h2>
         <Card className=" min-h-[50vh] border border-gray-400 p-4">
-            <form onSubmit={handleSubmit}>
+            <Form {...form}>
+              <form onSubmit={handleSubmit}>
                 {inputFields.map((inputField, index) => {
-                    inputField["id"] = index;
-                    return(
-                        <div key={index}>
-                            <div className='mb-4'>
-                                <Label>{inputField.label}</Label>
-                                {renderElement(inputField, index)}
-                            </div>
-                        </div>
+                  inputField["id"] = index;
+                  return(
+                    <FormField
+                      key={index}
+                      control={form.control}
+                      name={inputField.name}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-md">{inputField.label}</FormLabel>
+                            {renderFormField(inputField.type, inputField, form)}
+                        </FormItem>
+                      )}
+                    />
                     )
-                })}
+                  })}
                 <Button className="w-full" type="submit">Submit</Button>
-            </form>
+              </form>
+            </Form>
         </Card>
     </div>
     )

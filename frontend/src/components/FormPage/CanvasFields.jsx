@@ -44,7 +44,7 @@ function CanvasTextAreaField({element}){
 
 function CanvasSelectField({element}){
     return (
-        <Select>
+        <Select name={element.name}>
             <SelectTrigger className="w-[100%]">
                 <SelectValue placeholder={"Select one of these..."} />
             </SelectTrigger>
@@ -60,13 +60,14 @@ function CanvasSelectField({element}){
 }
 
 function CanvasRadioField({element}){
+    console.log(element.name);
     return (
         <>
-            <RadioGroup defaultValue="comfortable">
+            <RadioGroup>
                 {
                     element.options.map((option, index)=>(
                         <div className="flex items-center space-x-2" key={index}>
-                            <RadioGroupItem value={`${option}-${index}`} id={`${option}-${index}`} />
+                            <RadioGroupItem name={element.name} value={`${option}-${index}`} id={`${option}-${index}`}/>
                             <Label htmlFor={`${option}-${index}`}>{option}</Label>
                         </div>
                     ))
@@ -108,7 +109,7 @@ function CanvasDataListField({element}){
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
                 <Command>
-                    <CommandInput placeholder="Search..." />
+                    <CommandInput placeholder="Search..." name={element.name}/>
                     <CommandEmpty>No results found</CommandEmpty>
                     <CommandGroup>
                     {element.options.map((option, index) => (
@@ -142,7 +143,7 @@ function CanvasCheckBoxField({element}) {
             {
                 element.options.map((option, index) => (
                     <div className="flex items-center space-x-2" key={index}>
-                        <Checkbox id={`opt-${index}`} className="mb-1"/>
+                        <Checkbox id={`opt-${index}`} className="mb-1" name={element.name}/>
                         <label
                             htmlFor={`opt-${index}`}
                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
