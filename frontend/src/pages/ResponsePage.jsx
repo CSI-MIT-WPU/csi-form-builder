@@ -34,23 +34,23 @@ export default function ResponsePage() {
         getData();
     }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(e.target);
+    const onSubmit = (values) => {
+        // e.preventDefault();
+        console.log(values);
     }
 
-    const renderFormField = (type, field, form) => {
+    const renderFormField = (type, field, form, field_f) => {
       if (type === "textfield" || type === "email" || type === "telephone" || type === "number" || type === "file") {
-        return <SimpleInput field={field}/>
+        return <SimpleInput field={field} form={form}/>
       }
       else if (type === "textarea") {
         return <TextArea field={field}/>
       }
       else if (type === "select") {
-        return <SelectField field={field}/>
+        return <SelectField field={field} form={form} field_f={field_f}/>
       }
       else if (type === "datalist") {
-        return <DataListField field={field} form={form}/>
+        return <DataListField field={field} form={form} field_f={field_f}/>
       }
       else if (type === "radio") {
         return <RadioField field={field}/>
@@ -65,7 +65,7 @@ export default function ResponsePage() {
         <h2 className="scroll-m-20 border-b p-6 text-3xl font-semibold tracking-tight first:mt-0 text-center">{formName}</h2>
         <Card className=" min-h-[50vh] border border-gray-400 p-4">
             <Form {...form}>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
                 {inputFields.map((inputField, index) => {
                   inputField["id"] = index;
                   return(
@@ -76,7 +76,7 @@ export default function ResponsePage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-md">{inputField.label}</FormLabel>
-                            {renderFormField(inputField.type, inputField, form)}
+                            {renderFormField(inputField.type, inputField, form, field)}
                         </FormItem>
                       )}
                     />

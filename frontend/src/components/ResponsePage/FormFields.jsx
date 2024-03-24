@@ -59,7 +59,16 @@ function SelectField(props) {
                 {
                     props.field.options.map((option, index) => {
                         return (
-                            <SelectItem value={option} key={index}>{option}</SelectItem>
+                            <SelectItem
+                                value={option}
+                                key={index}
+                                onSelect={() => {
+                                    const fieldName = props.field.name;
+                                    const fieldVal = option;
+                                    props.form.setValue(fieldName, fieldVal)
+                                    console.log(props.field_f);
+                                }}> {option}
+                            </SelectItem>
                         )
                     })
                 }
@@ -69,67 +78,60 @@ function SelectField(props) {
 }
 
 function DataListField(props) {
-    const languages = [
-        { label: "English", value: "en" },
-        { label: "French", value: "fr" },
-        { label: "German", value: "de" },
-        { label: "Spanish", value: "es" },
-        { label: "Portuguese", value: "pt" },
-        { label: "Russian", value: "ru" },
-        { label: "Japanese", value: "ja" },
-        { label: "Korean", value: "ko" },
-        { label: "Chinese", value: "zh" },
-    ];
-    return (
-        //     <Popover>
-        //     <PopoverTrigger asChild>
-        //       <FormControl>
-        //         <Button
-        //           variant="outline"
-        //           role="combobox"
-        //           className={cn(
-        //             "w-full justify-between",
-        //             !props.field.value && "text-muted-foreground"
-        //           )}
-        //         >
-        //           {props.field.value
-        //             ? languages.find(
-        //                 (language) => language.value === props.field.value
-        //               )?.label
-        //             : "Select language"}
-        //           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        //         </Button>
-        //       </FormControl>
-        //     </PopoverTrigger>
-        //     <PopoverContent className="w-[200px] p-0">
-        //       <Command>
-        //         <CommandInput placeholder="Search language..." />
-        //         <CommandEmpty>No language found.</CommandEmpty>
-        //         <CommandGroup>
-        //           {languages.map((language) => (
-        //             <CommandItem
-        //               value={language.label}
-        //               key={language.value}
-        //               onSelect={() => {
-        //                 props.form.setValue("language", language.value)
-        //               }}
-        //             >
-        //               <Check
-        //                 className={cn(
-        //                   "mr-2 h-4 w-4",
-        //                   language.value === props.field.value
-        //                     ? "opacity-100"
-        //                     : "opacity-0"
-        //                 )}
-        //               />
-        //               {language.label}
-        //             </CommandItem>
-        //           ))}
-        //         </CommandGroup>
-        //       </Command>
-        //     </PopoverContent>
-        //   </Popover>
-        <p className="text-lg font-bold">WORK IN PROGRESS</p>
+    return (                       //this works on form submit  
+        <Popover>                       
+            <PopoverTrigger asChild>
+                <FormControl>
+                    <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                            "w-full justify-between",
+                            !props.field.value && "text-muted-foreground"
+                        )}
+                    >
+                        {props.field_f.value
+                            ? props.field.options.find(
+                                (option) => option === props.field_f.value
+                            )
+                            : "Select option"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                </FormControl>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+                <Command>
+                    <CommandInput placeholder="Search..." />
+                    <CommandEmpty>No matches found.</CommandEmpty>
+                    <CommandGroup>
+                        {props.field.options.map((option, index) => {
+                            return (
+                                <CommandItem
+                                    value={option}
+                                    key={index}
+                                    onSelect={() => {
+                                        const fieldName = props.field.name;
+                                        const fieldVal = option;
+                                        props.form.setValue(fieldName, fieldVal)
+                                        console.log(props.field_f);
+                                    }}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            option === props.field.value
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                        )}
+                                    />
+                                    {option}
+                                </CommandItem>
+                            )
+                        })}
+                    </CommandGroup>
+                </Command>
+            </PopoverContent>
+        </Popover>
     )
 }
 
@@ -161,32 +163,6 @@ function RadioField(props) {
 }
 
 function CheckBoxField(props) {
-    const items = [
-        {
-            id: "recents",
-            label: "Recents",
-        },
-        {
-            id: "home",
-            label: "Home",
-        },
-        {
-            id: "applications",
-            label: "Applications",
-        },
-        {
-            id: "desktop",
-            label: "Desktop",
-        },
-        {
-            id: "downloads",
-            label: "Downloads",
-        },
-        {
-            id: "documents",
-            label: "Documents",
-        },
-    ]
     return (
 
         <div>
@@ -195,23 +171,50 @@ function CheckBoxField(props) {
                     <FormField
                         key={index}
                         control={props.form.control}
-                        name={props.field.name}
+                        name={`${option}-${index}`}
                         render={({ field }) => {
                             return (
-                                <FormItem
-                                    key={index}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                >
+                                <FormItem>
+                                    {
+                                        props.field.options.map((option, index) => {
+                                            return (
+                                                <FormField
+                                                    key={`${option}-${index}`}                                                          //idk what any of this does
+                                                    name={`${option}-${index}`}                                                  
+                                                    control={props.form.control}
+                                                    render={({ field }) => {
+                                                        // {console.log(field.value)}
+                                                        {console.log(field)}
+                                                        <FormItem
+                                                            key={`${option}-${index}`}
+                                                            className="flex flex-row items-start space-x-3 space-y-0"
+                                                        >
+                                                            <FormControl>                       
+                                                                <Checkbox
+                                                                    checked={field.value}
+                                                                    onCheckedChange={(checked)=>{
+                                                                        return checked 
+                                                                        ? field.onChange([...field.value])
+                                                                        : field.onChange(
+                                                                            field.value?.filter(
+                                                                              (value) => value !== field.value
+                                                                            )
+                                                                          )
+                                                                    }}
+                                                                />
+                                                            </FormControl>
+                                                        </FormItem>                                                                 //idk what any of this does
+                                                    }}
+                                                />
+                                            )
+                                        })
+                                    }
                                     <FormControl>
                                         <Checkbox
-                                            onCheckedChange={(checked) => {
-                                                return checked
-                                            }}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
                                         />
                                     </FormControl>
-                                    <FormLabel className="font-normal">
-                                        {option}
-                                    </FormLabel>
                                 </FormItem>
                             )
                         }}
