@@ -137,8 +137,8 @@ function RadioField(props) {
     return (
         <FormControl>
             <RadioGroup
-                onValueChange={props.field.onChange}
-                defaultValue={props.field.value}
+                onValueChange={props.field_f.onChange}
+                defaultValue={props.field_f.value}
                 className="flex flex-col space-y-1"
             >
                 {
