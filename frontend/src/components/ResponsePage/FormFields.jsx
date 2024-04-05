@@ -32,7 +32,7 @@ import { Checkbox } from "../ui/checkbox";
 function SimpleInput(props) {
     return (
         <FormControl>
-            <Input {...props.field} />
+            <Input {...props.field} {...props.field_f} value={props.field_f.value ?? ""}/>
         </FormControl>
     )
 }
@@ -40,16 +40,14 @@ function SimpleInput(props) {
 function TextArea(props) {
     return (
         <FormControl>
-            <Textarea
-                {...props.field}
-            />
+            <Textarea {...props.field} {...props.field_f}/>
         </FormControl>
     )
 }
 
 function SelectField(props) {
     return (
-        <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
+        <Select onValueChange={props.field_f.onChange} defaultValue={props.field_f.value}>
             <FormControl>
                 <SelectTrigger>
                     <SelectValue placeholder="Select an option..." />
@@ -78,7 +76,7 @@ function SelectField(props) {
 }
 
 function DataListField(props) {
-    return (                       //this works on form submit  
+    return (
         <Popover>                       
             <PopoverTrigger asChild>
                 <FormControl>
@@ -164,7 +162,6 @@ function RadioField(props) {
 
 function CheckBoxField(props) {
     return (
-
         <div>
             {
                 props.field.options.map((option, index) => (
@@ -184,7 +181,7 @@ function CheckBoxField(props) {
                                                     control={props.form.control}
                                                     render={({ field }) => {
                                                         // {console.log(field.value)}
-                                                        {console.log(field)}
+                                                        // {console.log(field)}
                                                         <FormItem
                                                             key={`${option}-${index}`}
                                                             className="flex flex-row items-start space-x-3 space-y-0"

@@ -16,76 +16,79 @@ import { CheckBoxField, DataListField, RadioField, SelectField, SimpleInput, Tex
 
 export default function ResponsePage() {
 
-    const [formName, setFormName] = useState("Test form");
-    const [inputFields, setInputFields] = useState([]);
-    const { id } = useParams();
-    const form = useForm();
+  const [formName, setFormName] = useState("Test form");
+  const [inputFields, setInputFields] = useState([]);
+  const { id } = useParams();
+  const form = useForm();
 
-    useEffect(()=>{
-        const getData = async () => {
-            const url = `http://127.0.0.1:3000/forms/${id}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            const formData = data["form"];
-            setFormName(formData["form_title"]);
-            setInputFields(formData["input_fields"]);
-            console.log(formData["input_fields"]);
-        }
-        getData();
-    }, []);
-
-    const onSubmit = (values) => {
-        // e.preventDefault();
-        console.log(values);
+  useEffect(() => {
+    const getData = async () => {
+      const url = `http://127.0.0.1:3000/forms/${id}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const formData = data["form"];
+      setFormName(formData["form_title"]);
+      setInputFields(formData["input_fields"]);
+      console.log(formData["input_fields"]);
     }
+    getData();
+  }, []);
 
-    const renderFormField = (type, field, form, field_f) => {
-      if (type === "textfield" || type === "email" || type === "telephone" || type === "number" || type === "file") {
-        return <SimpleInput field={field} form={form}/>
-      }
-      else if (type === "textarea") {
-        return <TextArea field={field}/>
-      }
-      else if (type === "select") {
-        return <SelectField field={field} form={form} field_f={field_f}/>
-      }
-      else if (type === "datalist") {
-        return <DataListField field={field} form={form} field_f={field_f}/>
-      }
-      else if (type === "radio") {
-        return <RadioField field={field}/>
-      }
-      else if (type === "checkbox") {
-        return <CheckBoxField field={field} form={form}/>
-      }
+  const onSubmit = (values) => {
+    // e.preventDefault();
+    console.log(values);
+  }
+
+  const renderFormField = (type, field, form, field_f) => {
+    //field   = DOM field
+    //field_f = used for handling events like onChange
+    //field_f is important for form submission and field is important for displaying things like placeholders etc.
+    if (type === "textfield" || type === "email" || type === "telephone" || type === "number" || type === "file") {
+      return <SimpleInput field={field} field_f={field_f} form={form}/> 
     }
+    else if (type === "textarea") {
+      return <TextArea field={field} field_f={field_f}/>
+    }
+    else if (type === "select") {
+      return <SelectField field={field} field_f={field_f} form={form}/>
+    }
+    else if (type === "datalist") {
+      return <DataListField field={field} field_f={field_f} form={form}/>
+    }
+    else if (type === "radio") {
+      return <RadioField field={field} field_f={field_f}/>
+    }
+    else if (type === "checkbox") {
+      return <CheckBoxField field={field} field_f={field_f} form={form}/>
+    }
+  }
 
-    return (
+  return (
     <div className='w-full p-4'>
-        <h2 className="scroll-m-20 border-b p-6 text-3xl font-semibold tracking-tight first:mt-0 text-center">{formName}</h2>
-        <Card className=" min-h-[50vh] border border-gray-400 p-4">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                {inputFields.map((inputField, index) => {
-                  inputField["id"] = index;
-                  return(
-                    <FormField
-                      key={index}
-                      control={form.control}
-                      name={inputField.name}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-md">{inputField.label}</FormLabel>
-                            {renderFormField(inputField.type, inputField, form, field)}
-                        </FormItem>
-                      )}
-                    />
-                    )
-                  })}
-                <Button className="w-full" type="submit">Submit</Button>
-              </form>
-            </Form>
-        </Card>
+      <h2 className="scroll-m-20 border-b p-6 text-3xl font-semibold tracking-tight first:mt-0 text-center">{formName}</h2>
+      <Card className=" min-h-[50vh] border border-gray-400 p-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {inputFields.map((inputField, index) => {
+              inputField["id"] = index;
+              return (
+                <FormField
+                  key={index}
+                  control={form.control}
+                  name={inputField.name}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-md">{inputField.label}</FormLabel>
+                      {renderFormField(inputField.type, inputField, form, field)}
+                    </FormItem>
+                  )}
+                />
+              )
+            })}
+            <Button className="w-full" type="submit">Submit</Button>
+          </form>
+        </Form>
+      </Card>
     </div>
-    )
+  )
 }
