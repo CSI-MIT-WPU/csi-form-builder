@@ -161,65 +161,61 @@ function RadioField(props) {
 }
 
 function CheckBoxField(props) {
+
+    //If the checkbox array is empty then create array with field.value otherwise append the value
+    function handleCheckboxChange(field, _field){
+        if (!field.value) {
+            return field.onChange([field.value, _field])
+        }
+        else{
+            return field.onChange([...field.value, _field]);
+        }
+    }
+
     return (
-        <div>
+        <>
             {
-                props.field.options.map((option, index) => (
+                props.field.options.map((_field, index)=>(
                     <FormField
-                        key={index}
-                        control={props.form.control}
-                        name={`${option}-${index}`}
-                        render={({ field }) => {
-                            return (
-                                <FormItem>
-                                    {
-                                        props.field.options.map((option, index) => {
-                                            return (
-                                                <FormField
-                                                    key={`${option}-${index}`}                                                          //idk what any of this does
-                                                    name={`${option}-${index}`}                                                  
-                                                    control={props.form.control}
-                                                    render={({ field }) => {
-                                                        // {console.log(field.value)}
-                                                        // {console.log(field)}
-                                                        <FormItem
-                                                            key={`${option}-${index}`}
-                                                            className="flex flex-row items-start space-x-3 space-y-0"
-                                                        >
-                                                            <FormControl>                       
-                                                                <Checkbox
-                                                                    checked={field.value}
-                                                                    onCheckedChange={(checked)=>{
-                                                                        return checked 
-                                                                        ? field.onChange([...field.value])
-                                                                        : field.onChange(
-                                                                            field.value?.filter(
-                                                                              (value) => value !== field.value
-                                                                            )
-                                                                          )
-                                                                    }}
-                                                                />
-                                                            </FormControl>
-                                                        </FormItem>                                                                 //idk what any of this does
-                                                    }}
-                                                />
+                      key={_field}
+                      control={props.form.control}
+                      name={props.field.name}
+                      render={({ field }) => {
+                        return (
+                            <FormItem
+                              key={_field}
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                                <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(_field)}
+                                      onCheckedChange = {(checked) => {
+                                        console.log(field.value)
+                                        return checked 
+                                          ?
+                                            handleCheckboxChange(field, _field)
+                                          : field.onChange(
+                                            field.value?.filter(
+                                                (value) => value !== _field
                                             )
-                                        })
-                                    }
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )
-                        }}
+                                          )
+                                      }}
+                                    />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                    {_field}
+                                </FormLabel>
+                            </FormItem>
+                        )
+                      }}
                     />
                 ))
             }
-        </div>
+        </>
     )
 }
+
+
+//add decoration fields
 
 export { SimpleInput, TextArea, SelectField, DataListField, RadioField, CheckBoxField };
