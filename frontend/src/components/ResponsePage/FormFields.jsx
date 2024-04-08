@@ -165,11 +165,9 @@ function CheckBoxField(props) {
     //If the checkbox array is empty then create array with field.value otherwise append the value
     function handleCheckboxChange(field, _field){
         if (!field.value) {
-            return field.onChange([field.value, _field])
+            field.value = [];
         }
-        else{
-            return field.onChange([...field.value, _field]);
-        }
+        return field.onChange([...field.value, _field]);
     }
 
     return (
