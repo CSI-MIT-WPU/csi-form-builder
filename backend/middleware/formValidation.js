@@ -40,7 +40,7 @@ const validateForm = (req, res, next) => {
                 return res.status(400).json({message: `${attr} not provided for ${input_fields[i].name}`});            
             }
             //checks if the type of minimum length/maximum length is integer or not
-            if ((attr === "minLen" || attr === "maxLen" || attr === "minVal" || attr === "maxVal") && typeof field[attr] !== "number") {
+            if ((attr === "minLength" || attr === "maxLength" || attr === "min" || attr === "max") && typeof field[attr] !== "number") {
                 return res.status(400).json({message: `Bad request`}); 
             }
             //checks if required field is boolean or not 

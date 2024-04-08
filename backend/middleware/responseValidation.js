@@ -30,14 +30,14 @@ const validateResponse = async (req, res, next) => {
 
             if (field.type === "textfield") {
                 const value = field[inputFields[i].name];            // value is the actual response value of a specific form field for a given form.
-                const isValid = TextField.checkValidity(value, inputFields[i].minLen, inputFields[i].maxLen, inputFields[i].required);
+                const isValid = TextField.checkValidity(value, inputFields[i].minLength, inputFields[i].maxLength, inputFields[i].required);
                 if (!isValid) {
                     return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
                 }
             }
             else if (field.type === "textarea") {
                 const value = field[inputFields[i].name];
-                const isValid = TextareaField.checkValidity(value, inputFields[i].minLen, inputFields[i].maxLen, inputFields[i].required);
+                const isValid = TextareaField.checkValidity(value, inputFields[i].minLength, inputFields[i].maxLength, inputFields[i].required);
                 if (!isValid) {
                     return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
                 }
@@ -65,7 +65,7 @@ const validateResponse = async (req, res, next) => {
             }
             else if (field.type === "number") {
                 const value = field[inputFields[i].name];
-                const isValid = NumberField.checkValidity(value, inputFields[i].minVal, inputFields[i].maxVal, inputFields[i].required);
+                const isValid = NumberField.checkValidity(value, inputFields[i].min, inputFields[i].max, inputFields[i].required);
                 if (!isValid) {
                     return res.status(400).json({message: `Improper input format for ${inputFields[i].name}.`});
                 }

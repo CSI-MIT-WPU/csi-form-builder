@@ -68,10 +68,10 @@ export default function ResponsePage() {
       return <H2Field field={field} />
     }
     else if (type === "paragraph") {
-      return <ParagraphField field={field}/>
+      return <ParagraphField field={field} />
     }
     else if (type === "separator") {
-      return <SeparatorField field={field}/>
+      return <SeparatorField field={field} />
     }
   }
 
@@ -84,7 +84,13 @@ export default function ResponsePage() {
             {inputFields.map((inputField, index) => {
               inputField["id"] = index;
               if (inputField.type === "h1" || inputField.type === "h2" || inputField.type === "p" || inputField.type === "separator") {
-                return renderFormField(inputField.type, inputField);
+                return (
+                  <div key={index}>
+                    {
+                      renderFormField(inputField.type, inputField)
+                    }
+                  </div>
+                )
               }
               else {
                 return (
@@ -98,7 +104,7 @@ export default function ResponsePage() {
                         {renderFormField(inputField.type, inputField, form, field)}
                       </FormItem>
                     )}
-                    
+
                   />
                 )
               }

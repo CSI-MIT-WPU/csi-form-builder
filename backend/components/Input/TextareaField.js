@@ -1,16 +1,16 @@
 class TextareaField{
     /**
      * @param {String} name
-     * @param {Number} minLen
-     * @param {Number} maxLen
+     * @param {Number} minLength
+     * @param {Number} maxLength
      * @param {String} label
      * @param {String} placeholder
      * @param {Boolean} required
     */
-    constructor(name, minLen, maxLen, label, placeholder, required){
+    constructor(name, minLength, maxLength, label, placeholder, required){
         this.name = name;
-        this.minLen = minLen;
-        this.maxLen = maxLen;
+        this.minLength = minLength;
+        this.maxLength = maxLength;
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
@@ -18,11 +18,11 @@ class TextareaField{
     }
 
     //checks for length range and required
-    static checkValidity(val, minLen, maxLen, required){
+    static checkValidity(val, minLength, maxLength, required){
         if (required && val === "" || val === null) {
             return false;
         }
-        if (val.length < minLen || val.length > maxLen) {
+        if (val.length < minLength || val.length > maxLength) {
             return false;
         }
         return true;
