@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-import React from "react";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -28,11 +25,12 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "../ui/checkbox";
+import { Separator } from "../ui/separator";
 
 function SimpleInput(props) {
     return (
         <FormControl>
-            <Input {...props.field} {...props.field_f} value={props.field_f.value ?? ""}/>
+            <Input {...props.field} {...props.field_f} value={props.field_f.value ?? ""} className="text-md"/>
         </FormControl>
     )
 }
@@ -40,14 +38,14 @@ function SimpleInput(props) {
 function TextArea(props) {
     return (
         <FormControl>
-            <Textarea {...props.field} {...props.field_f}/>
+            <Textarea {...props.field} {...props.field_f} className="text-md"/>
         </FormControl>
     )
 }
 
 function SelectField(props) {
     return (
-        <Select onValueChange={props.field_f.onChange} defaultValue={props.field_f.value}>
+        <Select onValueChange={props.field_f.onChange} defaultValue={props.field_f.value} >
             <FormControl>
                 <SelectTrigger>
                     <SelectValue placeholder="Select an option..." />
@@ -77,7 +75,7 @@ function SelectField(props) {
 
 function DataListField(props) {
     return (
-        <Popover>                       
+        <Popover>
             <PopoverTrigger asChild>
                 <FormControl>
                     <Button
@@ -162,8 +160,8 @@ function RadioField(props) {
 
 function CheckBoxField(props) {
 
-    //If the checkbox array is empty then create array with field.value otherwise append the value
-    function handleCheckboxChange(field, _field){
+    // On the first click of a checkbox, initialize an empty field.value. This fixed the checkbox bug.
+    function handleCheckboxChange(field, _field) {
         if (!field.value) {
             field.value = [];
         }
@@ -173,39 +171,39 @@ function CheckBoxField(props) {
     return (
         <>
             {
-                props.field.options.map((_field, index)=>(
+                props.field.options.map((_field) => (
                     <FormField
-                      key={_field}
-                      control={props.form.control}
-                      name={props.field.name}
-                      render={({ field }) => {
-                        return (
-                            <FormItem
-                              key={_field}
-                              className="flex flex-row items-start space-x-3 space-y-0"
-                            >
-                                <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(_field)}
-                                      onCheckedChange = {(checked) => {
-                                        console.log(field.value)
-                                        return checked 
-                                          ?
-                                            handleCheckboxChange(field, _field)
-                                          : field.onChange(
-                                            field.value?.filter(
-                                                (value) => value !== _field
-                                            )
-                                          )
-                                      }}
-                                    />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                    {_field}
-                                </FormLabel>
-                            </FormItem>
-                        )
-                      }}
+                        key={_field}
+                        control={props.form.control}
+                        name={props.field.name}
+                        render={({ field }) => {
+                            return (
+                                <FormItem
+                                    key={_field}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value?.includes(_field)}
+                                            onCheckedChange={(checked) => {
+                                                console.log(field.value)
+                                                return checked
+                                                    ?
+                                                    handleCheckboxChange(field, _field)
+                                                    : field.onChange(
+                                                        field.value?.filter(
+                                                            (value) => value !== _field
+                                                        )
+                                                    )
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        {_field}
+                                    </FormLabel>
+                                </FormItem>
+                            )
+                        }}
                     />
                 ))
             }
@@ -214,6 +212,30 @@ function CheckBoxField(props) {
 }
 
 
-//add decoration fields
+//decoration fields
+function H1Field(props) {
+    return (
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">{props.field.content}</h1>
+    )
+}
 
-export { SimpleInput, TextArea, SelectField, DataListField, RadioField, CheckBoxField };
+function H2Field(props) {
+    console.log(props.field);
+    return (
+        <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">{props.field.content}</h2>
+    )
+}
+
+function ParagraphField(props) {
+    return (
+        <p className="leading-7">{props.field.content}</p>
+    )
+}
+
+function SeparatorField(props) {
+    return (
+        <Separator className="my-4 bg-slate-700" />
+    )
+}
+
+export { SimpleInput, TextArea, SelectField, DataListField, RadioField, CheckBoxField, H1Field, H2Field, ParagraphField, SeparatorField };
