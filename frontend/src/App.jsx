@@ -2,15 +2,16 @@ import { useLocation, BrowserRouter as Router, Routes, Route } from "react-route
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import FormPage from "./pages/FormPage";
-import Navbar from "./components/common/Navbar";
 import FormRes from "./pages/FormRes";
-import { Toaster } from "@/components/ui/sonner"
 import ResponsePage from "./pages/ResponsePage";
+import SuccessPage from "./pages/SuccessPage";
+import Navbar from "./components/common/Navbar";
+import { Toaster } from "@/components/ui/sonner"
 
 function NavbarRenderer() {
   const location = useLocation();
-  const isResponsePage = location.pathname.startsWith('/form/');
-  return !isResponsePage && <Navbar />;
+  const showNavBar = location.pathname.startsWith('/form/') || location.pathname.startsWith('/success');
+  return !showNavBar && <Navbar />;
 }
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/form-res/:id" element={<FormRes />} />
           <Route path="/form/:id" element={<ResponsePage/>}/>
+          <Route path="/success" element={<SuccessPage/>}/>
         </Routes>
         <Toaster/>
       </div>

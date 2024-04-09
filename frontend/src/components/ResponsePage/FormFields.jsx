@@ -62,7 +62,6 @@ function SelectField(props) {
                                     const fieldName = props.field.name;
                                     const fieldVal = option;
                                     props.form.setValue(fieldName, fieldVal)
-                                    console.log(props.field_f);
                                 }}> {option}
                             </SelectItem>
                         )
@@ -109,7 +108,6 @@ function DataListField(props) {
                                         const fieldName = props.field.name;
                                         const fieldVal = option;
                                         props.form.setValue(fieldName, fieldVal)
-                                        console.log(props.field_f);
                                     }}
                                 >
                                     <Check
@@ -186,7 +184,6 @@ function CheckBoxField(props) {
                                         <Checkbox
                                             checked={field.value?.includes(_field)}
                                             onCheckedChange={(checked) => {
-                                                console.log(field.value)
                                                 return checked
                                                     ?
                                                     handleCheckboxChange(field, _field)
@@ -220,7 +217,6 @@ function H1Field(props) {
 }
 
 function H2Field(props) {
-    console.log(props.field);
     return (
         <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">{props.field.content}</h2>
     )

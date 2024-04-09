@@ -17,10 +17,10 @@ function generateFields(fields) {
     let content = [];
     fields.forEach(field => {
         if (field.type == "text") {
-            content.push(new TextField(field.name,field.minLen, field.maxLen, field.label, field.placeholder, field.required));
+            content.push(new TextField(field.name,field.minLength, field.maxLength, field.label, field.placeholder, field.required));
         }
         else if (field.type == "textarea") {
-            content.push(new TextareaField(field.name, field.minLen, field.maxLen, field.label, field.placeholder, field.required));
+            content.push(new TextareaField(field.name, field.minLength, field.maxLength, field.label, field.placeholder, field.required));
         }
         else if (field.type == "tel") {
             content.push(new TelephoneField(field.name, field.label,  field.placeholder,  field.required));
@@ -32,7 +32,7 @@ function generateFields(fields) {
             content.push(new RadioField(field.name, field.options, field.label, field.required));
         }
         else if (field.type == "number") {
-            content.push(new NumberField( field.name, field.minVal,  field.maxVal,  field.label,  field.placeholder,  field.required));
+            content.push(new NumberField( field.name, field.min,  field.max,  field.label,  field.placeholder,  field.required));
         }
         else if (field.type == "file") {
             content.push(new FileField(field.name,field.maxSize, field.label, field.required));
