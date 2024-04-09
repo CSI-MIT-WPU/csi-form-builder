@@ -21,10 +21,10 @@ export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFi
         label: "Label",
         required: "Required",
         placeholder: "Placeholder",
-        minLen: "Minimum Length",
-        maxLen: "Maximum Length",
-        minVal: "Minimum Value",
-        maxVal: "Maxiumum Value",
+        minLength: "Minimum Length",
+        maxLength: "Maximum Length",
+        min: "Minimum Value",
+        max: "Maxiumum Value",
         maxSize: "Maximum Size",
         options: "Options",
         content: "Content"
@@ -63,7 +63,7 @@ export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFi
     const validateDatatypes = (items) => {
         for (let i = 0; i < items.length; i++) {
             const field = items[i];
-            for (const propName of ['maxLen', 'minLen', 'maxVal', 'minVal']) {
+            for (const propName of ['maxLength', 'minLength', 'max', 'min']) {
                 if (field[propName] && typeof field[propName] !== 'number') {
                     field[propName] = Number(field[propName]);
                 }
@@ -92,6 +92,7 @@ export default function EditDialog({canvasItems, fieldInfo, open, setOpen, setFi
                                         if (key === "type" || key === "id" || key === "list") {
                                             return null;
                                         } else {
+                                            console.log(fieldAttributeMap[key])
                                             return (
                                                 <div className="grid grid-cols-4 items-center gap-4" key={index}>
                                                     <Label htmlFor={key} className="text-right">

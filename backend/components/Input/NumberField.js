@@ -1,16 +1,16 @@
 class NumberField{
     /**
      * @param {String} name
-     * @param {Number} minVal
-     * @param {Number} maxVal
+     * @param {Number} min
+     * @param {Number} max
      * @param {String} label
      * @param {String} placeholder
      * @param {Boolean} required
     */
-    constructor(name, minVal, maxVal, label, placeholder, required){
+    constructor(name, min, max, label, placeholder, required){
         this.name = name;
-        this.minVal = minVal;
-        this.maxVal = maxVal;
+        this.min = min;
+        this.max = max;
         this.label = label;
         this.placeholder = placeholder;
         this.required = required;
@@ -18,11 +18,11 @@ class NumberField{
     }
 
     //checks for range and required
-    static checkValidity(val, minVal, maxVal, required){
+    static checkValidity(val, min, max, required){
         if (required && val.toString() === "" || val === null) {
             return false;
         }
-        if (val < minVal || val > maxVal) {
+        if (val < min || val > max) {
             return false;
         }
         return true;

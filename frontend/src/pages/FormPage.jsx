@@ -242,6 +242,7 @@ function FormPage() {
   const postForm = async(formStatus) => {
     const url = "http://127.0.0.1:3000/forms";
     try {
+      console.log(canvasItems)
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -265,7 +266,7 @@ function FormPage() {
   }
 
   const publishForm = (e) => {
-    postForm("publish");
+    postForm("published");
   };
 
   const draftForm = (e) => {

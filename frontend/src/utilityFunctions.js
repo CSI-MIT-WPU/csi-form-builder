@@ -4,8 +4,8 @@ function setElementData(type){
         element = {
             id:`${type}-${Date.now()}`,                                          
             name:`${type}-${Date.now()}`,                                       
-            minLen: 5,
-            maxLen: 12,
+            minLength: 5,
+            maxLength: 12,
             label:type,                                                                      
             placeholder:"Placeholder",
             required: false,
@@ -16,8 +16,8 @@ function setElementData(type){
         element = {
             id:`${type}-${Date.now()}`,                                          
             name:`${type}-${Date.now()}`,                                       
-            minLen: 50,
-            maxLen: 120,
+            minLength: 50,
+            maxLength: 120,
             label:type,                                                                      
             placeholder:"Placeholder",
             required: false,
@@ -60,8 +60,8 @@ function setElementData(type){
             name:`${type}-${Date.now()}`,
             label:type,
             required: false,
-            minVal: 0,
-            maxVal: 99,
+            min: 0,
+            max: 99,
             placeholder: "10",
             type:type.slice(0, type.indexOf("Field")).toLowerCase()
         }
