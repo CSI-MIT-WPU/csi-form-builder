@@ -7,10 +7,6 @@ const formSchema = new mongoose.Schema({
         default: uuidv4,
         unique: true
     },
-    sheet_id: {
-        type: String,
-        required: true
-    },
     form_title: {
         type: String,
         required: true
@@ -27,7 +23,11 @@ const formSchema = new mongoose.Schema({
     },
     input_fields:{
         type: mongoose.Schema.Types.Mixed
-    }
+    },
+    sheet_id: {
+        type: String,
+        required: true
+    },
 }, {timestamps:true}
 );
 
