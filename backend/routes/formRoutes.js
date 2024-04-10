@@ -5,6 +5,7 @@ const Form = require('../models/Form');
 const Response = require("../models/Response");
 const generateFields = require('../utils/index');
 const validateForm = require('../middleware/formValidation');
+const { connectToGoogleSheets, createNewSheet, getSheetData } = require('../googleSheets');
 
 //GET ALL FORMS
 router.get("/all", async (req, res) => {
@@ -41,6 +42,16 @@ router.post("/", validateForm, async(req, res) => {
         res.status(200).json({message:newForm});
     } catch (error) {
         res.status(500).json({error:"An error occured"});
+    }
+});
+
+router.post("/test", async(req, res) => {
+    try {
+        const sheets = await connectToGoogleSheets();
+        const data = await createNewSheet(sheets, "1B7b8Zljx4JqKYYifHOrn-VcwSboS3h00_HsL-YWlxTI", "New Form");
+        res.status(200).json({message:data});
+    } catch (error) {
+        console.log(error);
     }
 });
 
