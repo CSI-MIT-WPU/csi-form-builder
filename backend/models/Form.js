@@ -26,7 +26,6 @@ const formSchema = new mongoose.Schema({
     },
     sheet_id: {
         type: String,
-        required: true
     },
 }, {timestamps:true}
 );

@@ -1,4 +1,5 @@
 const { google } = require("googleapis");
+const { sheets } = require("googleapis/build/src/apis/sheets");
 
 const connectToGoogleSheets = async () => {
     const auth = new google.auth.GoogleAuth({
@@ -31,6 +32,7 @@ const createNewSheet = (sheets, spreadsheetId, title) => {
                 reject(err);
             } else {
                 const sheetId = response.data.replies[0].addSheet.properties.sheetId;
+                console.log(sheetId)
                 resolve(sheetId);
             }
         });
@@ -127,6 +129,7 @@ const setSheetHeaders = async (sheets, spreadsheetId, sheetId, data) => {
         };
         sheets.spreadsheets.batchUpdate(request, (err, response) => {
             if (err) {
+                console.log(sheetId)
                 reject(err);
             } else {
                 resolve(response);
@@ -135,5 +138,28 @@ const setSheetHeaders = async (sheets, spreadsheetId, sheetId, data) => {
     });
 };
 
+const deleteSheet = (sheets, spreadsheetId, sheetId) => {
+    return new Promise((resolve, reject) => {
+        const request = {
+            spreadsheetId: spreadsheetId,
+            resource: {
+                requests: [
+                    {
+                        deleteSheet: {
+                            sheetId: sheetId
+                        }
+                    }
+                ]
+            }
+        };
+        sheets.spreadsheets.batchUpdate(request, (err, response) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+};
 
-module.exports = { connectToGoogleSheets, createNewSheet, getSheetData, setSheetHeaders };
+module.exports = { connectToGoogleSheets, createNewSheet, getSheetData, setSheetHeaders, deleteSheet};

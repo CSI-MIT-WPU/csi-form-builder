@@ -5,7 +5,7 @@ const Form = require('../models/Form');
 const Response = require("../models/Response");
 const generateFields = require('../utils/index');
 const validateForm = require('../middleware/formValidation');
-const { connectToGoogleSheets, createNewSheet, getSheetData, setSheetHeaders } = require('../googleSheets');
+const { connectToGoogleSheets, createNewSheet, getSheetData, setSheetHeaders, deleteSheet } = require('../googleSheets');
 require("dotenv").config();
 
 //GET ALL FORMS
@@ -38,14 +38,24 @@ router.get("/:form_id", async (req, res) => {
 router.post("/", validateForm, async (req, res) => {
     try {
         const { form_title, team, status, input_fields } = req.body;
+        const spreadSheetId = process.env.GSHEET_ID;
+        let sheetId;
         if (await Form.findOne({ form_title: form_title })) {
             return res.status(409).json({ message: "Form already exists!" });
         }
         let content = generateFields(input_fields);
         const sheets = await connectToGoogleSheets();
-        const sheetId = await createNewSheet(sheets, `${process.env.GSHEET_ID}`, form_title);
-        const newForm = await Form.create({ form_title: form_title, team: team, status: status, input_fields: content, sheet_id: sheetId});
-        await setSheetHeaders(sheets, `${process.env.GSHEET_ID}`, sheetId, input_fields);
+        let newForm = await Form.create({ form_title: form_title, team: team, status: status, input_fields: content });
+        try {
+            sheetId = await createNewSheet(sheets, spreadSheetId, form_title);
+            newForm.sheet_id = sheetId;
+            await newForm.save();
+            await setSheetHeaders(sheets, spreadSheetId, sheetId, input_fields);
+        } catch (error) {
+            await Form.deleteOne({ _id: newForm._id });
+            await deleteSheet(sheets, spreadSheetId, sheetId);
+            throw error;
+        }
         res.status(200).json({ message: newForm });
     } catch (error) {
         res.status(500).json({ error: "An error occurred" });
@@ -55,7 +65,7 @@ router.post("/", validateForm, async (req, res) => {
 router.post("/test", async (req, res) => {
     try {
         const sheets = await connectToGoogleSheets();
-        const data = await setSheetHeaders(sheets, "1B7b8Zljx4JqKYYifHOrn-VcwSboS3h00_HsL-YWlxTI", 0);
+        const data = await setSheetHeaders(sheets, "1B7b8Zljx4JqKYYifHOrn-VcwSboS3h00_HsL-YWlxTI", 553256054);
         res.status(200).json({ message: data });
     } catch (error) {
         res.status(500).json({ error: error });
@@ -90,6 +100,18 @@ router.delete("/:form_id", async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 })
+
+
+//DELTES ALL FORMS AND RESPONSES FROM DATABASE (USE WITH CAUTION)
+router.delete("/", async (req, res) => {
+    try {
+        await Form.deleteMany();
+        await Response.deleteMany();
+        return res.status(200).json({ message: "Deleted all forms." });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 
 module.exports = router;
