@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const Form = require('../models/Form');
 const Response = require("../models/Response");
 const generateFields = require('../utils/index');
@@ -59,16 +58,6 @@ router.post("/", validateForm, async (req, res) => {
         res.status(200).json({ message: newForm });
     } catch (error) {
         res.status(500).json({ error: "An error occurred" });
-    }
-});
-
-router.post("/test", async (req, res) => {
-    try {
-        const sheets = await connectToGoogleSheets();
-        const data = await setSheetHeaders(sheets, "1B7b8Zljx4JqKYYifHOrn-VcwSboS3h00_HsL-YWlxTI", 553256054);
-        res.status(200).json({ message: data });
-    } catch (error) {
-        res.status(500).json({ error: error });
     }
 });
 

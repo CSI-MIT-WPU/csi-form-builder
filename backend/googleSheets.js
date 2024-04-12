@@ -56,7 +56,7 @@ const getSheetData = (sheets) => {
 }
 
 const setSheetHeaders = async (sheets, spreadsheetId, sheetId, data) => {
-    let sheetHeaders = [];
+    let sheetHeaders = ["Email"];
     data.forEach(field => {
         if (
             field.type !== "h1" &&
@@ -167,10 +167,16 @@ const appendResponse = async (sheets, spreadsheetId, sheetName, data) => {
 
     data.forEach(jsonString => {
       const dataObject = JSON.parse(jsonString);
-      const { type, ...rest } = dataObject; // Destructure object, exclude "type"
+      const { type, ...rest } = dataObject; 
     
       if (!["h1", "h2", "paragraph", "separator"].includes(type)) {
-        responseData.push(...Object.values(rest)); // Push all values except "type"
+        Object.values(rest).forEach(value => {
+          if (Array.isArray(value)) {
+            responseData.push(value.join(", "));
+          } else {
+            responseData.push(String(value));
+          }
+        });
       }
     });
 

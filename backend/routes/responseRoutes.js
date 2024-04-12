@@ -56,18 +56,6 @@ router.post("/submit", validateResponse, async(req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
-    try {
-        const {user_email, form_id, content} = req.body;  
-        const sheets = await connectToGoogleSheets();
-        const response = await appendResponse(sheets, process.env.GSHEET_ID, "Samit", content);
-        console.log(response);
-        res.status(200).json({message: response});
-    } catch (error) {
-        console.log(error)
-    }
-});
-
 //DELETE BY RESPONSE ID
 router.delete("/response/:res_id", async (req, res) => {
     try {
