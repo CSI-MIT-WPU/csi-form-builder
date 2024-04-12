@@ -23,7 +23,10 @@ const formSchema = new mongoose.Schema({
     },
     input_fields:{
         type: mongoose.Schema.Types.Mixed
-    }
+    },
+    sheet_id: {
+        type: String,
+    },
 }, {timestamps:true}
 );
 

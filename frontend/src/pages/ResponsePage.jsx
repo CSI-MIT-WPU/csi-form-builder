@@ -1,3 +1,5 @@
+//ResponsePage.jsx
+
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
@@ -127,25 +129,26 @@ export default function ResponsePage() {
   }
 
   return (
-    <div className='w-full p-4'>
-      <h2 className="scroll-m-20 border-b p-6 text-3xl font-semibold tracking-tight first:mt-0 text-center">{formName}</h2>
-      <Card className="min-h-[50vh] border border-gray-400 p-4">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-3'>
-            <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-              Enter Email
-            </h2>
-            <FormField
-              control={form.control}
-              name="user_email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-md">Enter Email</FormLabel>
-                  <Input {...field} type="email" value={field.value ?? ""} required />
-                </FormItem>
-              )}
-            />
-            <SeparatorField />
+    <div className='w-full flex justify-center items-center'>
+      <div className='w-1/2'>
+        <h2 className='scroll-m-20 border-b p-6 text-3xl font-semibold tracking-tight first:mt-0 text-center'>{formName}</h2>
+        <Card className='min-h-[50vh] border border-gray-400 p-4'>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-3'>
+              <h2 className='scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0'>
+                Enter Email
+              </h2>
+              <FormField
+                control={form.control}
+                name='user_email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='text-md'>Enter Email</FormLabel>
+                    <Input {...field} type='email' value={field.value ?? ''} required />
+                  </FormItem>
+                )}
+              />
+              <SeparatorField />
             {inputFields.map((inputField, index) => {
               inputField["id"] = index;
               if (inputField.type === "h1" || inputField.type === "h2" || inputField.type === "paragraph" || inputField.type === "separator") {
@@ -175,9 +178,10 @@ export default function ResponsePage() {
               }
             })}
             <Button className="w-full" type="submit">Submit</Button>
-          </form>
-        </Form>
-      </Card>
+            </form>
+          </Form>
+        </Card>
+      </div>
     </div>
   )
 }
