@@ -3,6 +3,8 @@ const router = express.Router();
 
 const Response = require('../models/Response');
 const validateResponse = require('../middleware/responseValidation');
+const { connectToGoogleSheets, appendResponse } = require('../googleSheets');
+const Form = require('../models/Form');
 
 //GET ALL RESPONSES FOR ALL FORMS
 router.get("/all", async(req, res)=>{
@@ -29,17 +31,42 @@ router.get("/:form_id", async (req, res) => {
 router.post("/submit", validateResponse, async(req, res) => {
     try {
         const {user_email, form_id, content} = req.body;
+        const form = await Form.findOne({
+            form_id: form_id
+        });
+        if (!form) {
+            return res.status(400).json({message: "Form not found"});
+        }
+        const formName = form.form_title;
+        const sheets = await connectToGoogleSheets();
         const newResponse = await Response.create({
             user_email: user_email,
             form_id: form_id,
             content:content
         });
+        try {
+            await appendResponse(sheets, process.env.GSHEET_ID, formName, content);
+        } catch (error) {
+            await Response.deleteOne({_id: newResponse._id});
+            throw error;
+        }
         res.status(200).json({message: newResponse});
     } catch (error) {
         res.status(500).json({message: "Internal server error"});
     }
 });
 
+router.post("/", async (req, res) => {
+    try {
+        const {user_email, form_id, content} = req.body;  
+        const sheets = await connectToGoogleSheets();
+        const response = await appendResponse(sheets, process.env.GSHEET_ID, "Samit", content);
+        console.log(response);
+        res.status(200).json({message: response});
+    } catch (error) {
+        console.log(error)
+    }
+});
 
 //DELETE BY RESPONSE ID
 router.delete("/response/:res_id", async (req, res) => {

@@ -1,5 +1,4 @@
 const { google } = require("googleapis");
-const { sheets } = require("googleapis/build/src/apis/sheets");
 
 const connectToGoogleSheets = async () => {
     const auth = new google.auth.GoogleAuth({
@@ -162,4 +161,39 @@ const deleteSheet = (sheets, spreadsheetId, sheetId) => {
     });
 };
 
-module.exports = { connectToGoogleSheets, createNewSheet, getSheetData, setSheetHeaders, deleteSheet};
+
+const appendResponse = async (sheets, spreadsheetId, sheetName, data) => {
+    const responseData = [];
+
+    data.forEach(jsonString => {
+      const dataObject = JSON.parse(jsonString);
+      const { type, ...rest } = dataObject; // Destructure object, exclude "type"
+    
+      if (!["h1", "h2", "paragraph", "separator"].includes(type)) {
+        responseData.push(...Object.values(rest)); // Push all values except "type"
+      }
+    });
+
+    console.log(responseData)
+
+    return new Promise((resolve, reject) => {
+        const request = {
+            spreadsheetId: spreadsheetId,
+            range: sheetName,
+            valueInputOption: "USER_ENTERED",
+            insertDataOption: "INSERT_ROWS",
+            resource: {
+                values: [responseData]
+            }
+        };
+        sheets.spreadsheets.values.append(request, (err, response) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
+module.exports = { connectToGoogleSheets, createNewSheet, getSheetData, setSheetHeaders, deleteSheet, appendResponse };
