@@ -34,9 +34,6 @@ router.post("/submit", validateResponse, async(req, res) => {
         const form = await Form.findOne({
             form_id: form_id
         });
-        if (!form) {
-            return res.status(400).json({message: "Form not found"});
-        }
         const formName = form.form_title;
         const sheets = await connectToGoogleSheets();
         const newResponse = await Response.create({
