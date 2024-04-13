@@ -22,8 +22,8 @@ function App() {
         <NavbarRenderer/>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<FormPage />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/build" element={<FormPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/form-res/:id" element={<FormRes />} />
           <Route path="/form/:id" element={<ResponsePage/>}/>
           <Route path="/success" element={<SuccessPage/>}/>

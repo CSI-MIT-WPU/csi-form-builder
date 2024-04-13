@@ -96,35 +96,23 @@ function Canvas(props) {
   const [fieldInfo, setFieldInfo] = useState(null);
 
   function renderElement(element) {
-    if (
-      element.type === "text" ||
-      element.type === "tel" ||
-      element.type === "email"
-    ) {
-      return <CanvasTextField element={element} />;
-    } else if (element.type === "textarea") {
-      return <CanvasTextAreaField element={element} />;
-    } else if (element.type === "select") {
-      return <CanvasSelectField element={element} />;
-    } else if (element.type === "radio") {
-      return <CanvasRadioField element={element} />;
-    } else if (element.type === "number") {
-      return <CanvasNumberField element={element} />;
-    } else if (element.type === "file") {
-      return <CanvasFileField element={element} />;
-    } else if (element.type === "datalist") {
-      return <CanvasDataListField element={element} />;
-    } else if (element.type === "checkbox") {
-      return <CanvasCheckBoxField element={element} />;
-    } else if (element.type === "h1") {
-      return <CanvasH1Field element={element} />;
-    } else if (element.type === "h2") {
-      return <CanvasH2Field element={element} />;
-    } else if (element.type === "paragraph") {
-      return <CanvasParagraphField element={element} />;
-    } else if (element.type === "separator") {
-      return <CanvasSeparatorField element={element} />;
-    }
+    const elementMap = {
+      text: <CanvasTextField element={element} />,
+      tel: <CanvasTextField element={element} />,
+      email: <CanvasTextField element={element} />,
+      textarea: <CanvasTextAreaField element={element} />,
+      select: <CanvasSelectField element={element} />,
+      radio: <CanvasRadioField element={element} />,
+      number: <CanvasNumberField element={element} />,
+      file: <CanvasFileField element={element} />,
+      datalist: <CanvasDataListField element={element} />,
+      checkbox: <CanvasCheckBoxField element={element} />,
+      h1: <CanvasH1Field element={element} />,
+      h2: <CanvasH2Field element={element} />,
+      paragraph: <CanvasParagraphField element={element} />,
+      separator: <CanvasSeparatorField element={element} />,
+    };
+    return elementMap[element.type];
   }
 
   function handleEdit() {
@@ -202,35 +190,23 @@ function FormPage() {
 
   const handleDragStart = (event) => {
     const type = event.active.id.split("-")[0];
-    if (type === "textfield") {
-      setDraggedElement(<TextField isDragging={true} />);
-    } else if (type === "emailfield") {
-      setDraggedElement(<EmailField isDragging={true} />);
-    } else if (type === "radiofield") {
-      setDraggedElement(<RadioField isDragging={true} />);
-    } else if (type === "textareafield") {
-      setDraggedElement(<TextAreaField isDragging={true} />);
-    } else if (type === "numberfield") {
-      setDraggedElement(<NumberField isDragging={true} />);
-    } else if (type === "telfield") {
-      setDraggedElement(<TelField isDragging={true} />);
-    } else if (type === "selectfield") {
-      setDraggedElement(<SelectField isDragging={true} />);
-    } else if (type === "filefield") {
-      setDraggedElement(<FileField isDragging={true} />);
-    } else if (type === "datalistfield") {
-      setDraggedElement(<DataListField isDragging={true} />);
-    } else if (type === "checkboxfield") {
-      setDraggedElement(<CheckBoxField isDragging={true} />);
-    } else if (type === "h1field") {
-      setDraggedElement(<H1Field isDragging={true} />);
-    } else if (type === "h2field") {
-      setDraggedElement(<H2Field isDragging={true} />);
-    } else if (type === "pfield") {
-      setDraggedElement(<ParagraphField isDragging={true} />);
-    } else if (type === "separatorfield") {
-      setDraggedElement(<SeparatorField isDragging={true} />);
-    }
+    const fieldMap = {
+      textfield: <TextField isDragging={true} />,
+      emailfield: <EmailField isDragging={true} />,
+      radiofield: <RadioField isDragging={true} />,
+      textareafield: <TextAreaField isDragging={true} />,
+      numberfield: <NumberField isDragging={true} />,
+      telfield: <TelField isDragging={true} />,
+      selectfield: <SelectField isDragging={true} />,
+      filefield: <FileField isDragging={true} />,
+      datalistfield: <DataListField isDragging={true} />,
+      checkboxfield: <CheckBoxField isDragging={true} />,
+      h1field: <H1Field isDragging={true} />,
+      h2field: <H2Field isDragging={true} />,
+      pfield: <ParagraphField isDragging={true} />,
+      separatorfield: <SeparatorField isDragging={true} />,
+    };
+    setDraggedElement(fieldMap[type]);
   };
 
   function deleteCanvasItems(index) {
@@ -257,20 +233,12 @@ function FormPage() {
         const errorData = await response.json(); 
         throw new Error(errorData.message); 
       }
-      navigate("/home");
+      navigate("/");
     } catch (error) {
         toast("There was an error!", {
           description: `${error.message}`,
         })
     }
-  }
-
-  const publishForm = (e) => {
-    postForm("published");
-  };
-
-  const draftForm = (e) => {
-    postForm("draft");
   }
 
   return (
@@ -310,8 +278,8 @@ function FormPage() {
               </div>
             </div>
             <div className="flex gap-2 self-end">
-              <Button onClick={publishForm} className="rounded-3xl">Publish</Button>
-              <Button onClick={draftForm} className="rounded-3xl" >Draft</Button>
+              <Button onClick={()=>postForm("publish")} className="rounded-3xl">Publish</Button>
+              <Button onClick={()=>postForm("draft")} className="rounded-3xl" >Draft</Button>
             </div>
           </div>
           <Canvas
