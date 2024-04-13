@@ -32,7 +32,9 @@ export default function Canvas(props) {
   
     function renderElement(element) {
       const elementMap = {
+        //text and textfield are 2 different keys because response from the backend requires textfield as a key and i cbb changing backend code
         text: <CanvasTextField element={element} />,
+        textfield: <CanvasTextField element={element} />,
         tel: <CanvasTextField element={element} />,
         email: <CanvasTextField element={element} />,
         textarea: <CanvasTextAreaField element={element} />,

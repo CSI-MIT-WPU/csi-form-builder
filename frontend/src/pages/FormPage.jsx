@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { DndContext } from "@dnd-kit/core";
@@ -33,8 +34,7 @@ import Canvas from "@/components/FormPage/Canvas";
 
 import { setElementData } from "@/utilityFunctions";
 
-
-function FormPage() {
+function FormPage({ editing, nameOfForm, inputFields }) {
   const [open, setOpen] = useState(false);
   const [canvasItems, setCanvasItems] = useState([]);
   const [draggedElement, setDraggedElement] = useState(null);
@@ -44,6 +44,18 @@ function FormPage() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    populateEditPage();
+  }, [inputFields]);
+
+  //populate edit page with form fields only if editing is true
+  function populateEditPage() {
+    if (editing) {
+      setCanvasItems(inputFields);
+    }
+  }
+
+  //handles drag end
   function handleDragEnd({ over }) {
     const type = draggedElement.type.name;
     if (over && over.id === "canvas") {
@@ -52,8 +64,10 @@ function FormPage() {
       setCanvasItems([...canvasItems, elementData]);
       setFieldInfo(elementData);
     }
+    console.log(canvasItems)
   }
 
+  //handles drag start. uses map to get the correct field component
   const handleDragStart = (event) => {
     const type = event.active.id.split("-")[0];
     const fieldMap = {
@@ -75,13 +89,8 @@ function FormPage() {
     setDraggedElement(fieldMap[type]);
   };
 
-  function deleteCanvasItems(index) {
-    const newCanvasItems = [...canvasItems];
-    newCanvasItems.splice(index, 1);
-    setCanvasItems(newCanvasItems);
-  }
-
-  const postForm = async(formStatus) => {
+  //used to publish/draft form to backend
+  const postForm = async (formStatus) => {
     const url = "http://127.0.0.1:3000/forms";
     try {
       console.log(canvasItems)
@@ -96,15 +105,22 @@ function FormPage() {
         })
       });
       if (!response.ok) {
-        const errorData = await response.json(); 
-        throw new Error(errorData.message); 
+        const errorData = await response.json();
+        throw new Error(errorData.message);
       }
       navigate("/");
     } catch (error) {
-        toast("There was an error!", {
-          description: `${error.message}`,
-        })
+      toast("There was an error!", {
+        description: `${error.message}`,
+      })
     }
+  }
+
+  //used to delete items from canvas. triggers when clicked on trash icon after hovering on a field on canvas.
+  function deleteCanvasItems(index) {
+    const newCanvasItems = [...canvasItems];
+    newCanvasItems.splice(index, 1);
+    setCanvasItems(newCanvasItems);
   }
 
   return (
@@ -124,30 +140,36 @@ function FormPage() {
 
         {/* Left part */}
         <div className="h-full w-3/4 gap-2">
-          <div className="flex items-center w-full pb-2">
-            <div className="flex gap-2 w-[100%]">
-              <div className="w-[40%]">
-                <Label>Enter form name</Label>
-                <Input
-                  onChange={(e) => setFormName(e.target.value)}
-                  placeholder="Epic form"
-                  className="border-gray-300"
-                />
+          {!editing ? (
+            <div className="flex items-center w-full pb-2">
+              <div className="flex gap-2 w-[100%]">
+                <div className="w-[40%]">
+                  <Label>Enter form name</Label>
+                  <Input
+                    onChange={(e) => setFormName(e.target.value)}
+                    placeholder="Epic form"
+                    className="border-gray-300"
+                  />
+                </div>
+                <div className="w-[40%]">
+                  <Label>Enter team name</Label>
+                  <Input
+                    onChange={(e) => setTeam(e.target.value)}
+                    placeholder="Epic team"
+                    className="border-gray-300"
+                  />
+                </div>
               </div>
-              <div className="w-[40%]">
-                <Label>Enter team name</Label>
-                <Input
-                  onChange={(e) => setTeam(e.target.value)}
-                  placeholder="Epic team"
-                  className="border-gray-300"
-                />
+              <div className="flex gap-2 self-end">
+                <Button onClick={() => postForm("published")} className="rounded-3xl">Publish</Button>
+                <Button onClick={() => postForm("draft")} className="rounded-3xl" >Draft</Button>
               </div>
+            </div>) : (
+            <div className=" flex w-full items-center justify-center pb-2">
+              <div className=" text-3xl" > { nameOfForm } </div>
             </div>
-            <div className="flex gap-2 self-end">
-              <Button onClick={()=>postForm("publish")} className="rounded-3xl">Publish</Button>
-              <Button onClick={()=>postForm("draft")} className="rounded-3xl" >Draft</Button>
-            </div>
-          </div>
+          )
+          }
           <Canvas
             canvasItems={canvasItems}
             setCanvasItems={setCanvasItems}

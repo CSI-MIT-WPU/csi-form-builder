@@ -8,7 +8,7 @@ function CreateFormBtn() {
     <Button
       variant="outline"
       className="h-full w-full flex-col items-center justify-center border-dashed border-primary/20"
-      onClick = {()=>navigate("/")}
+      onClick = {()=>navigate("/build")}
     >
       <BsFileEarmarkPlus className="group-hover:text-primar mb-2 h-8 w-8 text-muted-foreground" />
       <p className="text-xl font-bold text-muted-foreground group-hover:text-primary">

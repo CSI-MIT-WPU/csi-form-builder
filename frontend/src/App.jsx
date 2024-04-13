@@ -7,6 +7,7 @@ import ResponsePage from "./pages/ResponsePage";
 import SuccessPage from "./pages/SuccessPage";
 import Navbar from "./components/common/Navbar";
 import { Toaster } from "@/components/ui/sonner"
+import EditPage from "./pages/EditPage";
 
 function NavbarRenderer() {
   const location = useLocation();
@@ -15,14 +16,14 @@ function NavbarRenderer() {
 }
 
 function App() {
-
   return (
     <Router>
       <div className="App">
         <NavbarRenderer/>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/build" element={<FormPage />} />
+          <Route path="/build" element={<FormPage editing={false}/>} />
+          <Route path="/edit/:id" element={<EditPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/form-res/:id" element={<FormRes />} />
           <Route path="/form/:id" element={<ResponsePage/>}/>

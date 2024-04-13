@@ -151,7 +151,7 @@ const HomePage = () => {
               key={form.form_id}
               id={form.form_id}
               title={form.form_title}
-              description={`${form.team} department`}
+              description={`${form.team}`}
               timestamp={new Date(form.createdAt)}
               status={form.status}
             />
