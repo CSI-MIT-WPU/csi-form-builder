@@ -27,7 +27,7 @@ router.get("/:form_id", async (req, res) => {
 
 //POST A NEW RESPONSE TO A FORM
 router.post("/submit", validateResponse, async(req, res) => {
-    try {
+    // try {
         const {user_email, form_id, content} = req.body;
         const newResponse = await Response.create({
             user_email: user_email,
@@ -35,9 +35,9 @@ router.post("/submit", validateResponse, async(req, res) => {
             content:content
         });
         res.status(200).json({message: newResponse});
-    } catch (error) {
-        res.status(500).json({message: "Internal server error"});
-    }
+    // } catch (error) {
+    //     res.status(500).json({message: "Internal server error"});
+    // }
 });
 
 
