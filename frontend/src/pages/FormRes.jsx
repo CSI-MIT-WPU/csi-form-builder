@@ -1,5 +1,3 @@
-// FormRes.jsx
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DataTable from "@/components/common/DataTable";
@@ -42,95 +40,72 @@ const FormRes = () => {
       loading: false,
       className: "hidden md:block",
       timestamp: new Date(),
-  },
+    },
   ]);
 
   const { id } = useParams();
-  const [formData, setFormData] = useState(null); // State to hold form data
-  const [responseData, setResponseData] = useState([]); // State to hold response data
+  const [formData, setFormData] = useState(null);
+  const [responseData, setResponseData] = useState(null);
 
- // Function to fetch form data
-const fetchFormData = async () => {
-  const url = `http://127.0.0.1:3000/forms/${id}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("An error occurred while fetching form data");
+  // Function to fetch form data
+  const fetchFormData = async () => {
+    const url = `http://127.0.0.1:3000/forms/${id}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("An error occurred while fetching form data");
+      }
+      const data = await response.json();
+      setFormData(data.form);
+      console.log("Form", data) // Set the form data in state
+    } catch (error) {
+      console.log(error);
     }
-    const data = await response.json();
-    setFormData(data);
-    console.log("#####",data) // Set the form data in state
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
-// Function to fetch response data
-const fetchResponseData = async () => {
-  const url = `http://127.0.0.1:3000/responses/${id}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("An error occurred while fetching response data");
+  // Function to fetch response data
+  const fetchResponseData = async () => {
+    const url = `http://127.0.0.1:3000/responses/${id}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("An error occurred while fetching response data");
+      }
+      const data = await response.json();
+      console.log("Response :", data); // Log the data received from the server
+      setResponseData(data.responses); // Set the response data in state
+    } catch (error) {
+      console.log(error);
     }
-    const data = await response.json();
-    console.log("****",data); // Log the data received from the server
-    setResponseData(data); // Set the response data in state
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
   useEffect(() => {
     fetchFormData();
     fetchResponseData();
-  }, [id]); // Fetch data when the id changes
-
-  // Render the table with dynamic headings and response data
-  const renderTable = () => {
-    if (!formData || !formData.input_fields) {
-      console.log("1111", formData);
-      return <div>Loading...</div>;
-    }
-  
-    if (!responseData) {
-      console.log("2222", responseData);
-      return <div>No responses available.</div>;
-    }
-  
-    const formHeadings = formData.input_fields.map((field) => field.label);
-  
-    const tableRows = responseData.map((response) => {
-      return (
-        <tr key={response._id}>
-          {formData.input_fields.map((field) => (
-            <td key={field.name}>{response.content[field.name]}</td>
-          ))}
-        </tr>
-      );
-    });
-  
-    return (
-      <DataTable>
-        <thead>
-          <tr>
-            {formHeadings.map((heading, index) => (
-              <th key={index}>{heading}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{tableRows}</tbody>
-      </DataTable>
-    );
-  };
-  
+  }, []);
   return (
     <main>
-      {/* ... */}
+      <div className="grid w-full grid-cols-1 gap-4 pl-10 pr-10 pt-3 md:grid-cols-2 lg:grid-cols-4">
+        {statsData.map((stat, index) => (
+          <StatsCard
+            key={index}
+            title={stat.title}
+            icon={stat.icon}
+            helperText={stat.helperText}
+            value={stat.value}
+            loading={stat.loading}
+            className={stat.className}
+            timestamp={stat.timestamp}
+          />
+        ))}
+      </div>
+      <h2 className="mt-4 pb-2 pl-10 pr-10 text-xl font-semibold">Responses</h2>
+      <hr className="mx-10 my-2 border border-muted" />
       <div className="mx-10">
-        {renderTable()}
+        {formData && responseData && <DataTable columns={formData.input_fields} data={responseData} />}
       </div>
     </main>
   );
-}
-export default FormRes  
+};
+
+export default FormRes;
