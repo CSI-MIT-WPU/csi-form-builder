@@ -2,31 +2,17 @@
 /* eslint-disable no-unused-vars */
 import * as React from "react";
 import {
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -36,7 +22,7 @@ import {
 function getValue(obj) {
   // Get the dynamically changing key
   const dynamicKey = Object.keys(obj).find(key => key !== 'type');
-  
+
   // Retrieve and return the value associated with the dynamic key
   return obj[dynamicKey];
 }
@@ -50,13 +36,14 @@ const renderTableHeaders = (column, index) => {
 }
 
 const renderTableData = (row, index) => {
-  console.log(row.content)
+  console.log(row)
   return (
     <TableRow key={index}>
+      <TableCell>{row.user_email}</TableCell>
       {
         row.content.map((cell, index) => {
           return (
-            <TableCell key={index} className="max-w-[500px] overflow-ellipsis">
+            <TableCell key={index} className="max-w-[500px]">
               {getValue(cell)}
             </TableCell>
           )
@@ -92,14 +79,26 @@ export default function DataTable({ columns, data }) {
     },
   });
 
-
   return (
     <div className="w-full">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          // value={(table.getColumn("Email")?.getFilterValue()) ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             {
               <TableRow>
+                <TableHead>
+                  User Email
+                </TableHead>
                 {
                   columns.map((column, index) => {
                     return (
