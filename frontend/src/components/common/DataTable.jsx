@@ -1,14 +1,23 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
+
 import * as React from "react";
 import {
+  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { ChevronDown } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -19,42 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-function getValue(obj) {
-  // Get the dynamically changing key
-  const dynamicKey = Object.keys(obj).find(key => key !== 'type');
-
-  // Retrieve and return the value associated with the dynamic key
-  return obj[dynamicKey];
-}
-
-const renderTableHeaders = (column, index) => {
-  return (
-    <TableHead key={index}>
-      {column.label}
-    </TableHead>
-  );
-}
-
-const renderTableData = (row, index) => {
-  console.log(row)
-  return (
-    <TableRow key={index}>
-      <TableCell>{row.user_email}</TableCell>
-      {
-        row.content.map((cell, index) => {
-          return (
-            <TableCell key={index} className="max-w-[500px]">
-              {getValue(cell)}
-            </TableCell>
-          )
-        })
-      }
-    </TableRow>
-  )
-}
-
 export default function DataTable({ columns, data }) {
-
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -84,46 +58,92 @@ export default function DataTable({ columns, data }) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
-          // value={(table.getColumn("Email")?.getFilterValue()) ?? ""}
+          value={table.getColumn("user_email")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("user_email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns <ChevronDown className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {
-              <TableRow>
-                <TableHead>
-                  User Email
-                </TableHead>
-                {
-                  columns.map((column, index) => {
-                    return (
-                      renderTableHeaders(column, index)
-                    )
-                  })
-                }
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
-            }
+            ))}
           </TableHeader>
           <TableBody>
-            {
-              data.map((row, index) => {
-                return (
-                  renderTableData(row, index)
-                )
-              })
-            }
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredRowModel().rows.length} available rows.
         </div>
         <div className="space-x-2">
           <Button
