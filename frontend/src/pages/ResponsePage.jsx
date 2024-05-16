@@ -8,17 +8,17 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from "sonner"
-import { 
-  CheckBoxField, 
-  DataListField, 
-  H1Field, 
-  H2Field, 
-  ParagraphField, 
-  RadioField, 
-  SelectField, 
-  SeparatorField, 
-  SimpleInput, 
-  TextArea 
+import {
+  CheckBoxField,
+  DataListField,
+  H1Field,
+  H2Field,
+  ParagraphField,
+  RadioField,
+  SelectField,
+  SeparatorField,
+  SimpleInput,
+  TextArea
 } from '@/components/ResponsePage/FormFields';
 import {
   Form,
@@ -26,15 +26,17 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form"
+import { Label } from '@/components/ui/label';
 
 export default function ResponsePage() {
 
+  const { id } = useParams();
+  const form = useForm();
   const [formName, setFormName] = useState();
   const [inputFields, setInputFields] = useState([]);
   const [typeNameMap, setTypeNameMap] = useState({});
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const { id } = useParams();
-  const form = useForm();
 
   const mapTypeToName = (input_fields) => {
     input_fields.forEach(input_field => {
@@ -61,6 +63,11 @@ export default function ResponsePage() {
     getData();
   }, []);
 
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+    console.log(e.target.value)
+  }
+
   const onSubmit = async (values) => {
     const content = Object.keys(values).map((key) => ({
       [key]: values[key],
@@ -68,9 +75,9 @@ export default function ResponsePage() {
     }));
     try {
       const data = {
-        user_email: values["user_email"],
+        user_email: email,
         form_id: id,
-        content: content.map(item => JSON.stringify(item))
+        content: content
       };
       console.log(data)
       const response = await fetch("http://127.0.0.1:3000/responses/submit", {
@@ -138,46 +145,38 @@ export default function ResponsePage() {
               <h2 className='scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0'>
                 Enter Email
               </h2>
-              <FormField
-                control={form.control}
-                name='user_email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className='text-md'>Enter Email</FormLabel>
-                    <Input {...field} type='email' value={field.value ?? ''} required />
-                  </FormItem>
-                )}
-              />
+              <Label>Email</Label>
+              <Input type='email' required onChange={onEmailChange}/>
               <SeparatorField />
-            {inputFields.map((inputField, index) => {
-              inputField["id"] = index;
-              if (inputField.type === "h1" || inputField.type === "h2" || inputField.type === "paragraph" || inputField.type === "separator") {
-                return (
-                  <div key={index}>
-                    {
-                      renderFormField(inputField.type, inputField)
-                    }
-                  </div>
-                )
-              }
-              else {
-                return (
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name={inputField.name}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-md">{inputField.label}</FormLabel>
-                        {renderFormField(inputField.type, inputField, form, field)}
-                      </FormItem>
-                    )}
+              {inputFields.map((inputField, index) => {
+                inputField["id"] = index;
+                if (inputField.type === "h1" || inputField.type === "h2" || inputField.type === "paragraph" || inputField.type === "separator") {
+                  return (
+                    <div key={index}>
+                      {
+                        renderFormField(inputField.type, inputField)
+                      }
+                    </div>
+                  )
+                }
+                else {
+                  return (
+                    <FormField
+                      key={index}
+                      control={form.control}
+                      name={inputField.name}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-md">{inputField.label}</FormLabel>
+                          {renderFormField(inputField.type, inputField, form, field)}
+                        </FormItem>
+                      )}
 
-                  />
-                )
-              }
-            })}
-            <Button className="w-full" type="submit">Submit</Button>
+                    />
+                  )
+                }
+              })}
+              <Button className="w-full" type="submit">Submit</Button>
             </form>
           </Form>
         </Card>
