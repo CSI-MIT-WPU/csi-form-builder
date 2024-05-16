@@ -31,6 +31,7 @@ router.get("/:form_id", async (req, res) => {
 router.post("/submit", validateResponse, async(req, res) => {
     try {
         const {user_email, form_id, content} = req.body;
+        content.unshift({user_email: user_email});
         const form = await Form.findOne({
             form_id: form_id
         });

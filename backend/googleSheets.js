@@ -164,11 +164,8 @@ const deleteSheet = (sheets, spreadsheetId, sheetId) => {
 
 const appendResponse = async (sheets, spreadsheetId, sheetName, data) => {
     const responseData = [];
-
     data.forEach(jsonString => {
-      const dataObject = JSON.parse(jsonString);
-      const { type, ...rest } = dataObject; 
-    
+      const { type, ...rest } = jsonString; 
       if (!["h1", "h2", "paragraph", "separator"].includes(type)) {
         Object.values(rest).forEach(value => {
           if (Array.isArray(value)) {
