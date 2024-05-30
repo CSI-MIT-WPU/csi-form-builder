@@ -11,7 +11,8 @@ require("dotenv").config();
 router.get("/all", async (req, res) => {
     try {
         const forms = await Form.find();
-        res.status(200).json({ forms: forms });
+        const responses = await Response.find();
+        res.status(200).json({ forms: forms, responses: responses.length });
     } catch (error) {
         res.status(200).json({ message: error });
     }
@@ -32,6 +33,19 @@ router.get("/:form_id", async (req, res) => {
         res.status(200).json({ message: error });
     }
 })
+
+router.get("/visits/:form_id", async (req, res) => {
+    try {
+        const form = await Form.findOne({ form_id: req.params.form_id });
+        if (!form) {
+            return res.status(404).json({ message: "Form not found!" });
+        }
+        const responses = await Response.find({form_id:req.params.form_id});
+        res.status(200).json({ visits: form.visits, responses:responses.length });
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 //POSTS FORM 
 router.post("/", validateForm, async (req, res) => {
@@ -73,6 +87,20 @@ router.put("/", async (req, res) => {
             return res.status(404).json({ message: "Form not found. Invalid form id." })
         }
         return res.status(200).json({ updatedDoc: updatedForm });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.put("/visit/:form_id", async(req, res) => {
+    try {
+        const form_id = req.params.form_id;
+        const form = await Form.findOne({ form_id: form_id });
+        if (!form) {
+            return res.status(404).json({ message: "Form not found!" });
+        }
+        form.visits++;
+        await form.save();
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });
     }

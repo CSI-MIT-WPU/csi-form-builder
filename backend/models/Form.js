@@ -27,6 +27,10 @@ const formSchema = new mongoose.Schema({
     sheet_id: {
         type: String,
     },
+    visits: {
+        type: Number,
+        default: 0
+    },
 }, {timestamps:true}
 );
 

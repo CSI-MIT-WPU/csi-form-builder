@@ -30,8 +30,8 @@ import { Label } from '@/components/ui/label';
 
 export default function ResponsePage() {
 
-  const { id } = useParams();
   const form = useForm();
+  const { id } = useParams();
   const [formName, setFormName] = useState();
   const [inputFields, setInputFields] = useState([]);
   const [typeNameMap, setTypeNameMap] = useState({});
@@ -49,6 +49,22 @@ export default function ResponsePage() {
     });
   }
 
+
+  const increaseVisits = async () => {
+    try{
+      const url = `http://127.0.0.1:3000/forms/visit/${id}`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     const getData = async () => {
       const url = `http://127.0.0.1:3000/forms/${id}`;
@@ -61,6 +77,7 @@ export default function ResponsePage() {
       console.log(formData["input_fields"])
     }
     getData();
+    increaseVisits();
   }, []);
 
   const onEmailChange = (e) => {

@@ -56,6 +56,16 @@ const HomePage = () => {
       }
       const data = await response.json();
       setPublishedForms(data.forms);
+      setStatsData((prevState) => {
+        return prevState.map((stat) => {
+          if (stat.title === "Total Forms") {
+            return { ...stat, value: data.forms.length };
+          } else if (stat.title === "Total submissions") {
+            return { ...stat, value: data.responses };
+          }
+          return stat;
+        })
+      });
     } catch (error) {
       console.log(error);
     }
@@ -70,10 +80,10 @@ const HomePage = () => {
 
   const [statsData, setStatsData] = useState([
     {
-      title: "Total visits",
+      title: "Total Forms",
       // icon: <LuView className="text-blue-600" />,
-      helperText: "All time form visits",
-      value: "500",
+      helperText: "Total number of forms created",
+      value: "0",
       loading: false,
       className: "hidden md:block",
       timestamp: new Date(),
@@ -82,25 +92,7 @@ const HomePage = () => {
       title: "Total submissions",
       //icon: <FaWpforms className="text-yellow-600" />,
       helperText: "All time form submissions",
-      value: "500",
-      loading: false,
-      className: "hidden md:block",
-      timestamp: new Date(),
-    },
-    {
-      title: "Submission rate",
-      //icon: <HiCursorClick className="text-green-600" />,
-      helperText: "Visits that result in form submission",
-      value: "50%",
-      loading: false,
-      className: "hidden md:block",
-      timestamp: new Date(),
-    },
-    {
-      title: "Bounce rate",
-      //icon: <TbArrowBounce className="text-red-600" />,
-      helperText: "Visits that leave without interacting",
-      value: "20%",
+      value: "0",
       loading: false,
       className: "hidden md:block",
       timestamp: new Date(),
@@ -110,13 +102,13 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getUser() {}
+    async function getUser() { }
     getUser();
   }, []);
 
   return (
     <>
-      <div className="grid w-full grid-cols-1 gap-4 pl-10 pr-10 pt-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-4 pl-10 pr-10 pt-3 md:grid-cols-2 lg:grid-cols-2">
         {statsData.map((stat, index) => (
           <StatsCard
             key={index}

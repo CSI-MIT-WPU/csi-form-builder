@@ -1,8 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DataTable from "@/components/common/DataTable";
 import StatsCard from "@/components/common/StatsCard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 
 const FormRes = () => {
   const [statsData, setStatsData] = useState([
@@ -47,6 +59,9 @@ const FormRes = () => {
   const { id } = useParams();
   const [formData, setFormData] = useState(null);
   const [responseData, setResponseData] = useState(null);
+  const [visits, setVisits] = useState(0);
+
+  const navigate = useNavigate();
 
   //function to convert received data into a format that can be used by the tanstack table for table headers.
   function processHeaderData(inputFields) {
@@ -102,9 +117,7 @@ const FormRes = () => {
         throw new Error("An error occurred while fetching form data");
       }
       const data = await response.json();
-
       processHeaderData(data.form.input_fields);
-
       console.log("Form", data)
     } catch (error) {
       console.log(error);
@@ -127,10 +140,65 @@ const FormRes = () => {
     }
   };
 
+  const deleteForm = async () => {
+    const url = `http://127.0.0.1:3000/forms/${id}`;
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("An error occurred while deleting form");
+      }
+      const data = await response.json();
+      console.log("Deleted form", data);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getVisits = async () => {
+    const url = `http://127.0.0.1:3000/forms/visits/${id}`;
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      if (!response.ok) {
+        throw new Error("An error occurred while fetching data");
+      }
+      const data = await response.json();
+      console.log("Visits", data);
+      setStatsData(prevState => {
+        return prevState.map(stat => {
+          if (stat.title === "Total visits") {
+            return { ...stat, value: data.visits };
+          }
+          else if (stat.title === "Submission rate") {
+            return { ...stat, value: `${(data.responses/data.visits) * 100}%` };
+          }
+          else if (stat.title === "Bounce rate") {
+            return { ...stat, value: `${100 - (data.responses/data.visits) * 100}%` };
+          }
+          else if (stat.title === "Total submissions") {
+            return { ...stat, value: data.responses };
+          }
+          return stat;
+        })
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchFormData();
     fetchResponseData();
+    getVisits();
   }, []);
+
   return (
     <main>
       <div className="grid w-full grid-cols-1 gap-4 pl-10 pr-10 pt-3 md:grid-cols-2 lg:grid-cols-4">
@@ -150,7 +218,24 @@ const FormRes = () => {
       <h2 className="mt-4 pb-2 pl-10 pr-10 text-xl font-semibold">Responses</h2>
       <hr className="mx-10 my-2 border border-muted" />
       <div className="mx-10">
-        {formData && responseData && <DataTable columns={formData} data={responseData}/>}
+        {formData && responseData && <DataTable columns={formData} data={responseData} />}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">Delete Form</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the form and all its responses.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => deleteForm()}>Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </main>
   );
