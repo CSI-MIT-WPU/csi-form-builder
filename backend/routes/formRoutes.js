@@ -78,6 +78,20 @@ router.put("/", async (req, res) => {
     }
 });
 
+router.put("/visit/:form_id", async(req, res) => {
+    try {
+        const form_id = req.params.form_id;
+        const form = await Form.findOne({ form_id: form_id });
+        if (!form) {
+            return res.status(404).json({ message: "Form not found!" });
+        }
+        form.visits+=1;
+        await form.save();
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 //DELETE FORM (ALSO DELETES RESPONSES ALLOCATED TO A SPECIFIC FORM)
 router.delete("/:form_id", async (req, res) => {
     try {
